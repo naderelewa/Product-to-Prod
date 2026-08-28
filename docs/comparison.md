@@ -25,4 +25,3 @@ Every cell about another tool comes from one grounding file compiled for this co
 - **Single-player.** No team seats, no sharing, no collaboration features.
 - **Young.** Version 0.1.1. The interfaces described here can still move.
 - **No cloud dashboards.** Everything it produces is a file on your machine.
-- **Not field-proven everywhere.** Claude Code is the primary harness. Other agents that follow the Agent Skills spec can load this package ([`AGENTS.md`](../AGENTS.md) carries the protocol they follow), but no run outside Claude Code has been field-proven yet, and this page will say so until it has.

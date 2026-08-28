@@ -24,7 +24,9 @@
 # documents      the tree-wide grammar walk's count: every markdown file in the tree minus the 8
 #                tag-lint fixtures, which are deliberate violations the negative-fixture check
 #                requires. Measured, not remembered: 36 markdown files - 8 fixtures = 28.
-# links          the relative-link and in-document-anchor count the reference engine resolves: 51,
+# links          the relative-link and in-document-anchor count the reference engine resolves: 50,
+#                re-pinned 2026-08-28 with the founder's live comparison edit, which retired one
+#                linked caveat line (ruling on record); previous pin 51,
 #                measured across README.md and the six files under docs/. It was pinned at ZERO
 #                while the tree genuinely carried no relative link, and the zero outlived that
 #                tree — the both-directions rule above exists so it cannot happen again.
@@ -68,7 +70,7 @@
 
 total               = 87
 documents           = 28
-links               = 51
+links               = 50
 golden_lines        = 7
 deny_patterns       = 20
 deny_classes        = machine-paths,network-hosts,platform-ids,secret-shapes,trace-ids

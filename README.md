@@ -1,6 +1,7 @@
-# Product2Prod --> From Idea, Product Ownership, Strategy, Management, PRDs, Use Cases, Ceremonies also including Technical Product Management, Engineering Handoff to UAT, Analytics & Post Production Metrics and Results.
+# Product2Prod --> Product Perspective to Production
 
-**Product management for AI agents: turn an idea into documents that survive scrutiny. Every claim in what it writes is either sourced or labelled unsourced, and no gate is passed by the agent that wants to pass it.**
+
+**Product management for AI agents: From --> Idea Product Ownership, Strategy, Management, PRDs, Use Cases, Ceremonies also including Technical Product Management, Engineering Handoff to UAT, Analytics & Post Production Metrics and Results.. Every claim in what it writes is either sourced or labelled unsourced, and no gate is passed by the agent that wants to pass it.**
 
 one paragraph of intent → a plain-words interview → a locked context → gated phases → a package on disk that names its sources and its gaps
 

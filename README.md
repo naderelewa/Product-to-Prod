@@ -1,4 +1,4 @@
-# product2prod
+# Product2Prod --> From Idea, Product Ownership, Strategy, Management, PRDs, Use Cases, Ceremonies also including Technical Product Management, Engineering Handoff to UAT, Analytics & Post Production Metrics and Results.
 
 **Product management for AI agents: turn an idea into documents that survive scrutiny. Every claim in what it writes is either sourced or labelled unsourced, and no gate is passed by the agent that wants to pass it.**
 

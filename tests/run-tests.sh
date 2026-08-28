@@ -4249,7 +4249,12 @@ URLRX = re.compile("[A-Za-z][A-Za-z0-9+.-]*://[^\\s\"'" + chr(96) + ")>]+")
 # Case-SENSITIVE, and that is the point: -F is a form upload and -f is a failure mode, and the
 # declared read carries -f today. A case-blind list would fail the very line it is written for.
 SENDRX = re.compile(r"(?:^|\s)(-d|--data(?:-[a-z]+)?|-X|--request|-T|--upload-file|-F|--form"
-                    r"|-L|--location)(?:\s|=|$)")
+                    r"|-L|--location)(?:\s|=|$)"
+                    # A bundled short-flag cluster smuggles the same letters past the standalone
+                    # form (-fsSL redirects exactly as -L does), so any single-dash cluster
+                    # carrying one of the send/redirect letters fails too. The declared read's
+                    # own cluster (-fsS) carries none of them, which is why it stays green.
+                    r"|(?:^|\s)-[A-Za-z]*[dXTFL][A-Za-z]*(?:\s|=|$)")
 ASSIGNRX = re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)=")
 
 

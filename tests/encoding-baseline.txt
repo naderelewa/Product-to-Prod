@@ -61,6 +61,47 @@
 # dangerous-class count 0. Equal to the pass above (878 -> 886) with no further movement, because
 # this note's own added lines are written in plain ASCII (an ASCII hyphen, not the file's usual
 # dash) precisely so that pinning the count does not itself change the count it pins.
-walked_files = 60
-nonascii_lines = 886
-nonascii_files = 52
+# 2026-08-28 THE FIVE BENCHMARK PACKS, RE-MEASURED IN ONE PLACE: walked_files 60 -> 71,
+# nonascii_lines 886 -> 991, nonascii_files 52 -> 55.
+#
+# Derived rather than incremented. Five benchmark packs and one new script joined the tree, and each
+# arriving change had been nudging these three numbers on its own: five read-modify-writes against
+# one shared pin, each note true about its own pack and none of them able to say what the tree
+# totals. Two of those notes had already drifted from the value beside them. So the whole movement
+# is derived once, from a single census over the tree as it now stands, and every contributor is
+# named with its own measured delta rather than credited to whoever edited last:
+#
+#   FILES, 60 -> 71 (+11)
+#     +10  the five benchmark packs, two files each: packs/ref-<id>/pack.json and
+#          packs/ref-<id>/facts.md for notion, chatbase, clay, nawy and thndr
+#      +1  scripts/update-check.sh
+#
+#   NON-ASCII LINES, 886 -> 991 (+105), and the answer is NOT "the benchmark packs are ASCII".
+#   Four of the five are; the fifth is not, and a tree-level pin that repeated the first four
+#   packs' claim would have been false about the tree while sounding careful:
+#     +50  packs/ref-clay/facts.md   this pack writes in the reference library's own prose
+#                                    punctuation - the middot separator, the em dash, and the
+#                                    section sign each FOUND line needs for its locator
+#      +1  packs/ref-clay/pack.json
+#     +20  tests/run-tests.sh        the three pack guards' rationale blocks and the new
+#                                    benchmark-facts check
+#     +16  packs/README.md           the shape-triple tables, the benchmark section and the
+#                                    seeding rules
+#     +11  scripts/update-check.sh
+#      +3  config/packs.json         the five registry rows and the shape-field schema note
+#      +3  skills/pm-start/SKILL.md  the similar-case consent question
+#      +1  docs/configuration.md     a concurrent edit in the same window, counted here because
+#                                    this pin measures the TREE and not one lane's diff
+#      +0  the other four benchmark packs' eight files, measured and genuinely zero
+#      +0  tests/expected-checks.txt and this file: both gained a block of derivation notes
+#          and neither moved, because both blocks are written in plain ASCII on purpose
+#
+#   FILES CARRYING NON-ASCII, 52 -> 55 (+3): packs/ref-clay/facts.md, packs/ref-clay/pack.json and
+#   scripts/update-check.sh. Every other file above already carried non-ASCII prose beforehand.
+#
+# This block is written in plain ASCII, for the reason the note above it gives: a pin whose own
+# explanation moves the number it pins can never be written down correctly. The verifier RE-MEASURES
+# all three against the tree it actually finds and moves them in the same diff if a late edit lands.
+walked_files = 71
+nonascii_lines = 991
+nonascii_files = 55

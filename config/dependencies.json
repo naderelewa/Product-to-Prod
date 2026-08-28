@@ -21,7 +21,7 @@
  "deps": {
   "python3": {
    "kind": "cli",
-   "what": "the plugin scripts that embed python programs run on python3: preflight, hostcheck, tag-lint, inference-gate, telemetry (publish-lint and release are pure shell)",
+   "what": "the plugin scripts that embed python programs run on python3: preflight, hostcheck, tag-lint, inference-gate, telemetry, update-check (publish-lint and release are pure shell)",
    "probe": "command -v python3 >/dev/null",
    "fix": "install python3 (any 3.9+); on macOS the command line developer tools ship one: xcode-select --install",
    "auth_scope": "machine"

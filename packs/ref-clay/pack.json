@@ -1,0 +1,54 @@
+{
+ "_notes": "A BENCHMARK pack (packs/README.md §7). The company is real and named on the record, and every figure in facts.md is public: nothing here is invented, nothing here is confidential, and nothing about this company is ever shipped anywhere. Two jobs: (1) give a run a real business of this shape to read for STRUCTURE and for ranges, instead of reasoning from an average nobody measured; (2) hold the figures somewhere each one carries its source class and its year, so a number ages into staleness visibly rather than rotting behind a dead link. The shape triple (vertical, market, model) lives on the registry row per §1 and is deliberately not restated here: one place to read it is one place to change it.",
+ "name": "ref-clay",
+ "display": "Clay, go-to-market infrastructure benchmark",
+ "company": "Clay",
+ "industry": "GTM / sales infrastructure",
+ "status": "benchmark",
+ "fictional": false,
+ "nsm_note": "this pack hands a run comparison bands and never a north-star metric: the NSM is still elicited at context-lock, because a benchmark's north star is the answer to somebody else's question.",
+ "context_files": [
+  {
+   "role": "benchmark-corpus",
+   "path": "${local:corpus_base}/benchmarks/clay",
+   "level": "corpus-FOUND-universe",
+   "consult": "context-lock, the public material this pack's figures were read from. It resolves only where an operator has materialised it; until then it is a NAMED input-readiness miss, which is this pointer working exactly as designed rather than a fault to fix. Materialising it means placing that material here under the exact name above, with nothing appended after it, so this manifest never has to be edited to match a local filing habit"
+  },
+  {
+   "role": "benchmark-facts",
+   "path": "packs/ref-clay/facts.md",
+   "level": "standing-truth",
+   "consult": "research phase, the pack's own figure ledger. Every number carries its source class and the year it describes, and nothing else about this company enters a run as evidence"
+  }
+ ],
+ "found_sources": "public information only: the tagged figures in packs/ref-clay/facts.md are the whole FOUND universe under this pack, each one classed as public company reporting, public filings, or founder interviews as publicly reported, and each one dated. Anything this company has never disclosed is not FOUND here at any strength; a third-party estimate of it enters as INFERRED and says so on its own line.",
+ "quarantine": {
+  "default_deny": true,
+  "rule": "anything under ${local:corpus_base}/benchmarks/ that is not the one pointer above is comparison-only, and reading it during a run is leakage rather than diligence"
+ },
+ "ledger_classes": [
+  "gtm-benchmark",
+  "usage-based-pricing",
+  "category-creation"
+ ],
+ "ledger_note": "a benchmark pack seeds no cycle history of its own; these classes are the consult-first hint for a run that reaches for this comparison.",
+ "seam": {
+  "target": "none",
+  "note": "a benchmark pack ships nothing anywhere. It feeds comparison bands into a cycle whose OWN pack carries the handoff, and it never becomes the subject of one."
+ },
+ "analytics": {
+  "grounding": "corpus-pinned",
+  "corpus": [
+   "packs/ref-clay/facts.md"
+  ],
+  "stacks": [],
+  "note": "live-analytics capabilities are NOT selectable under this pack (injection point I5). Nobody here holds telemetry for another company, and a probe that implied otherwise would be the single failure this grounding exists to prevent."
+ },
+ "deck_kit": {
+  "status": "none",
+  "note": "no design kit exists for a company this package does not work for, so the deck lane is unavailable and a deck ask under this pack is refused with this note rather than styled generically."
+ },
+ "workbook_form": null,
+ "org_shape_default": null,
+ "provenance": "assembled for this package as a public-information benchmark: every figure was read from the public record on a named company and restated in this package's own words, with its source class and its year attached. No inside access, no confidential material, and no relationship with the company."
+}

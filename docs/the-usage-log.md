@@ -40,10 +40,13 @@ check runs on every write, and the previous generation is replaced rather than a
 there is nothing to sweep up and nothing that has to run for the ceiling to hold. Raise
 `telemetry.max_bytes` if you want a longer history.
 
-**Nothing is sent anywhere, and there is no setting that would change that.** This build ships no
-transmission path at all: no mode to switch, no destination to name, no background process, nothing
-on a timer. If a future version can send anything anywhere, it will be its own feature with its own
-consent gate, not a value you could flip in a config file.
+**Nothing from this log is sent anywhere, and there is no setting that would change that.** The log
+ships no transmission path at all: no mode to switch, no destination to name, no background process,
+nothing on a timer. One request exists anywhere in this package and it is not this one: the advisory
+version check reads the package's own published manifest, carries nothing about you or your machine,
+never opens this log, and stops entirely under `PKG_NO_UPDATE_CHECK=1`. If a future version can send
+anything anywhere, it will be its own feature with its own consent gate, not a value you could flip
+in a config file.
 
 **Turning it off, and deleting it.** Three commands, and both destructive ones are **dry run by
 default**: without `--apply` they print exactly what they would remove and change nothing.

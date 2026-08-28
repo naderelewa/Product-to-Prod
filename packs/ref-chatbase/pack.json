@@ -1,0 +1,49 @@
+{
+ "_notes": "BENCHMARK PACK (packs/README.md section 7). The company is real, named openly, and everything here is public information: a benchmark whose subject is hidden is a number with no referent. It is never selected as a run's own company; it is read for STRUCTURE and for population-tagged ranges. Every figure lives in facts.md carrying one of the three permitted source-class descriptors plus the year that figure describes, and no address: a class ages into staleness in front of the reader, a link rots quietly. Pointers only, as with every manifest here.",
+ "name": "ref-chatbase",
+ "display": "Chatbase, AI customer support benchmark (public information)",
+ "company": "Chatbase",
+ "industry": "AI customer support, sold globally as bootstrapped self-serve SaaS",
+ "shape_note": "the shape triple (vertical, market, model) is authoritative on this pack's registry row in config/packs.json, where the neighbour-matching question is asked over the index before any manifest is opened. The industry line above is the human label and never a second source of truth.",
+ "status": "benchmark",
+ "fictional": false,
+ "nsm_note": "no north star travels with this pack: these are somebody else's counting numbers, and a run still elicits its own north-star metric at context-lock.",
+ "context_files": [
+  {
+   "role": "benchmark-corpus",
+   "path": "${local:corpus_base}/benchmarks/chatbase",
+   "level": "corpus-FOUND-universe",
+   "consult": "input-readiness only. Most machines will not hold this material, and its absence is a NAMED miss at context-lock, never an error and never a machine dependency: the figures a run would read from it are already restated, tagged and dated in facts.md. A machine that does hold it keeps it here under the exact name above, with no suffix after it, so the pointer resolves as written."
+  },
+  {
+   "role": "benchmark-facts",
+   "path": "packs/ref-chatbase/facts.md",
+   "level": "standing-truth",
+   "consult": "any phase reading benchmark shape: the public figures, each with its source-class descriptor and the year it describes, and the strategic readings kept separate from them under hypotheses"
+  }
+ ],
+ "found_sources": "public information only: the tagged lines of packs/ref-chatbase/facts.md, each carrying a permitted source-class descriptor and a year, and nothing else grounds a claim under this pack.",
+ "ledger_classes": [
+  "benchmark-ai-support"
+ ],
+ "ledger_note": "a real pack names the learnings classes its history seeded so a later run consults them first; this benchmark has no run history of its own, so the class is only the consult-first hint for reads of this shape",
+ "seam": {
+  "target": "none",
+  "note": "nothing about a benchmark company is shipped anywhere. A run that reaches a handoff seam under this pack has selected the wrong pack."
+ },
+ "analytics": {
+  "grounding": "corpus-pinned",
+  "corpus": [
+   "packs/ref-chatbase/facts.md"
+  ],
+  "stacks": [],
+  "note": "live-analytics capabilities are NOT selectable under this pack (injection point I5). There is no instrumented product here to probe, only public figures with a year on each of them."
+ },
+ "deck_kit": {
+  "status": "none",
+  "note": "no design kit exists for a benchmark company and a visual identity is never borrowed, so the deck lane is unavailable under this pack."
+ },
+ "workbook_form": null,
+ "org_shape_default": null,
+ "provenance": "authored for this package as a benchmark pack. Public information only, restated in this pack's own wording; every figure carries a source-class descriptor and the year it describes rather than an address. No inside access, no private data, no proprietary metric, and no figure here is citable as a target for anybody else."
+}

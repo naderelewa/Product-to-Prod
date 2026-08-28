@@ -48,6 +48,12 @@ bash scripts/hostcheck.sh                           # report-only: what this hos
 
 `hostcheck.sh` never installs, removes or enables anything, and writes no file of its own. It prints a plan you approve and execute yourself. One disclosure: when your harness ships a CLI and it is present, the script calls that CLI to list servers, and the CLI may create its own config on a machine where it has never run. Those files are the harness's, not this package's.
 
+## The update check
+
+Advisory only, and it looks at most once every 2 days. [`scripts/update-check.sh`](../scripts/update-check.sh) fetches this package's own [`.claude-plugin/plugin.json`](../.claude-plugin/plugin.json) from the published branch with a plain GET, compares that version against the one installed here, and prints a single line when a newer release exists. The request carries nothing about you or your machine, and every failure — offline, blocked, an answer that will not parse — prints nothing and exits 0.
+
+The date of the last completed check is kept as `update-check-stamp` in the same config root as this plugin's machine-local config: `PKG_CONFIG`'s own directory, else `$XDG_CONFIG_HOME/product2prod`, else `$HOME/.config/product2prod`. Nothing else is written, and only a check that completed is stamped, so a machine that was offline looks again on its next run rather than going quiet for two days. Set `PKG_NO_UPDATE_CHECK=1` to turn it off entirely.
+
 ## The other local keys
 
 Not capabilities, but the same rule applies: pointers and identifiers, never secret values.

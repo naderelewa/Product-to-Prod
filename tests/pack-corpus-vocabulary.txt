@@ -32,3 +32,12 @@ template
 example
 case
 appendix
+
+# NO ROW FOR `facts`, AND THAT IS THE CURRENT ANSWER RATHER THAN AN OVERSIGHT. One was added while
+# the benchmark packs were landing, on the reading that facts.md would be walked here. It is not:
+# check_fictional_pack_content is scoped BY NAME to the template and exemplar statuses, because
+# this vocabulary exists so an invented company cannot ship a real internal exercise's filing
+# scheme, and a benchmark pack has no such scheme to hide - its subject is public and openly named.
+# So no benchmark filename ever reaches this list, and a row for `facts` would be a dead entry
+# carrying a live-sounding reason. If the content guard is ever re-scoped to cover benchmark packs,
+# the row comes back in that same diff, with the scope change beside it.

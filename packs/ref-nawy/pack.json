@@ -1,0 +1,56 @@
+{
+ "_notes": "BENCHMARK PACK. The company is real and is named openly, which is what a benchmark is for. Every figure in facts.md came from public information and carries the class of public source that reported it plus the year; nothing here is internal, confidential, or supplied by the company. A benchmark is read for shape, for ordering, and for population ranges. It is never selected as a run's own company, and its figures never become another company's targets.",
+ "name": "ref-nawy",
+ "display": "Nawy, property marketplace benchmark (public information)",
+ "company": "Nawy",
+ "industry": "real-estate marketplace, proptech",
+ "vertical": "real-estate marketplace",
+ "market": "Egypt and GCC",
+ "model": "marketplace with transaction services",
+ "status": "benchmark",
+ "fictional": false,
+ "nsm_note": "a benchmark carries somebody else's shape and never a run's north star: the NSM is still elicited at context-lock, and no figure in this pack may pre-answer it.",
+ "context_files": [
+  {
+   "role": "fact-record",
+   "path": "packs/ref-nawy/facts.md",
+   "level": "standing-truth",
+   "consult": "first, and usually only: the pack's own figures, each tagged with the class of public source that reported it and the year, followed by the strategic reads this pack holds as hypotheses rather than as evidence"
+  },
+  {
+   "role": "benchmark-source",
+   "path": "${local:corpus_base}/benchmarks/nawy",
+   "level": "corpus-FOUND-universe",
+   "consult": "a deeper benchmark read, when the figures already restated in facts.md are not enough. Expected absent on most machines: an absent pointer is a named input-readiness miss, Not Available (Accepted Gap), surfaced rather than silent, and never an error or a blocker. An operator who holds such material drops it at this location under exactly the name the pointer reads, carrying no suffix of any kind, so the pointer resolves without an edit to this manifest"
+  }
+ ],
+ "found_sources": "public information only: the tagged figures in facts.md, plus the corpus pointer on a machine where it resolves, and nothing else.",
+ "quarantine": {
+  "default_deny": true,
+  "rule": "anything under ${local:corpus_base}/benchmarks/ that is not listed in context_files is comparison-only; reading it during a run is leakage, and leakage invalidates the run rather than shortening it"
+ },
+ "ledger_classes": [
+  "benchmark-read",
+  "marketplace-transaction-model"
+ ],
+ "ledger_note": "the classes a benchmark read of a transaction-fee marketplace seeds; consult them before re-deriving a shape this pack already carries",
+ "seam": {
+  "target": "none",
+  "note": "a benchmark is observed, never built for: no engineering handoff exists, seam artifacts would be emitted FIXTURE-marked as a schema pass, and nothing ships anywhere"
+ },
+ "analytics": {
+  "grounding": "corpus-pinned",
+  "corpus": [
+   "packs/ref-nawy/facts.md"
+  ],
+  "stacks": [],
+  "note": "live-analytics capabilities are NOT selectable under a benchmark pack (injection point I5): there is no instrumented product here to probe, only public figures carrying their years"
+ },
+ "deck_kit": {
+  "status": "none",
+  "note": "no design kit is owned for a company this pack only observes and never works for, so the deck lane is unavailable; another company's visual identity is never improvised"
+ },
+ "workbook_form": null,
+ "org_shape_default": null,
+ "provenance": "assembled for this package as a public-information benchmark: the company is named openly, every figure in facts.md carries a descriptor source class and a year, and no internal, confidential, or company-supplied material is referenced."
+}

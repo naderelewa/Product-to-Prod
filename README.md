@@ -4,9 +4,9 @@
 
 one paragraph of intent → a plain-words interview → a locked context → gated phases → a package on disk that names its sources and its gaps
 
-[![version](https://img.shields.io/badge/version-0.1.1-blue)](#license-and-provenance)
+[![version](https://img.shields.io/badge/version-0.1.2-blue)](#license-and-provenance)
 [![license](https://img.shields.io/badge/license-MIT-green)](#license-and-provenance)
-[![self%20tests](https://img.shields.io/badge/self%20tests-87%20checks-brightgreen)](#tests-and-hygiene)
+[![self%20tests](https://img.shields.io/badge/self%20tests-89%20checks-brightgreen)](#tests-and-hygiene)
 [![usage%20log](https://img.shields.io/badge/usage%20log-off%20by%20default-lightgrey)](#the-usage-log)
 
 The agent drafts, then stops. Ruling the open questions stays yours, and the record shows what was known when you ruled. It runs inside an agent you already have, and nothing it writes leaves your machine.
@@ -30,7 +30,7 @@ The agent drafts, then stops. Ruling the open questions stays yours, and the rec
 
 ```bash
 git clone https://github.com/naderelewa/Product-to-Prod.git && cd Product-to-Prod
-bash tests/run-tests.sh                                                  # the suite behind the badge: 87 checks
+bash tests/run-tests.sh                                                  # the suite behind the badge: 89 checks
 bash scripts/tag-lint.sh tests/fixtures/tag-lint/bad-found-no-anchor.md  # watch it catch a FOUND with no locator
 scripts/telemetry.sh status                                              # confirms the usage log is off and no file exists
 ```
@@ -110,11 +110,11 @@ Yes, and with nothing installed it is the fastest way to draft one. What it lack
 
 | | Plain chat, no plugin | A PRD-writing SaaS | A product-coaching SaaS | This plugin |
 |---|---|---|---|---|
-| **Enforcement** | nothing to lint, nothing to gate | not established here | no lint, no tests, no gates | tag linter, fail-closed inference gate, publish lint, 87 self-checks, three human gates per cycle |
+| **Enforcement** | nothing to lint, nothing to gate | not established here | no lint, no tests, no gates | tag linter, fail-closed inference gate, publish lint, 89 self-checks, three human gates per cycle |
 | **Evidence discipline** | whatever the model volunteers | no evidence-tagging discipline | no evidence-tag system | six tags on every factual claim, no false FOUND, no anchor no claim, linted mechanically |
 | **Verification against reality** | none | none against analytics | not among its stages | a dedicated verb: pre-declared scenarios graded against the deployed build, queries run read-only |
-| **Data custody** | wherever your chat runs | cloud-held | cloud-held | local; usage log off by default; no transmission path in this build |
-| **Weakest point** | nothing pushes back | no repository or codebase awareness | the handoff is a prompt, not a contract | **no SaaS UI, single-player, young at v0.1.1, no cloud dashboards, field-proven in one harness only** |
+| **Data custody** | wherever your chat runs | cloud-held | cloud-held | local; usage log off by default; sends nothing; read-only version check (`PKG_NO_UPDATE_CHECK=1`) |
+| **Weakest point** | nothing pushes back | no repository or codebase awareness | the handoff is a prompt, not a contract | **no SaaS UI, single-player, young at v0.1.2, no cloud dashboards, field-proven in one harness only** |
 
 Two further classes and the rows this one omits: [The full comparison](docs/comparison.md). **Reach for something else when** people must work in the document at once, with seats and sharing (a hosted team product); when somebody who will never open an agent harness has to use it (a hosted web tool); or when the ask needs no verb at all (plain chat).
 
@@ -138,12 +138,12 @@ scripts/telemetry.sh uninstall --apply --confirm "apply uninstall"
 ## Tests and hygiene
 
 ```bash
-bash tests/run-tests.sh          # the package's own suite: 87 checks, offline, no credentials
+bash tests/run-tests.sh          # the package's own suite: 89 checks, offline, no credentials
 bash scripts/publish-lint.sh     # scans the tree against the 20 patterns in config/denylist.txt
 scripts/release.sh vX.Y.Z --overlay FILE   # three gates, then the tag; dry-run supported
 ```
 
-The [suite](tests/run-tests.sh) is pinned against a written-down list of its own checks, so a deleted check fails rather than shrinking the count. One of the 87 reads your repository's commit history, which no tree scan can see, so a clone whose history carries a banned token fails there while every file on disk is clean.
+The [suite](tests/run-tests.sh) is pinned against a written-down list of its own checks, so a deleted check fails rather than shrinking the count. One of the 89 reads your repository's commit history, which no tree scan can see, so a clone whose history carries a banned token fails there while every file on disk is clean.
 
 The [publish scan](scripts/publish-lint.sh) reads [its patterns](config/denylist.txt) from one file you can open before trusting it, and walks every file under the package root but five classes it counts and names on every run: this pattern file, the machine-local `config/local.json` if present, and the three git never publishes. The [release gate](scripts/release.sh) runs the commit-message lint, then that scan, then the suite, and will not tag unless all three are green. No skip flag, and a release runs the scan in maintainer mode: a private overlay from outside the tree is required.
 

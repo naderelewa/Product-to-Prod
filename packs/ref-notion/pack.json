@@ -1,0 +1,51 @@
+{
+ "_notes": "BENCHMARK PACK. The company is real and named openly, and everything this pack carries is public information: figures somebody published, restated in this pack's own words and each stamped with a source CLASS and a year rather than an outlet. A benchmark pack is a BAND, not a case: it is read to answer 'what shape does a company like this have', and it is never selected as the company a run is doing work for. Nothing here is evidence about the operator's own product, and no verb may quote a figure from this file as one.",
+ "name": "ref-notion",
+ "display": "Notion, horizontal workspace benchmark (public information only)",
+ "company": "Notion",
+ "industry": "AI workspace / productivity SaaS",
+ "status": "benchmark",
+ "fictional": false,
+ "benchmark": {
+  "nsm_note": "this pack hands a run no north-star metric and cannot: the one number that would prove people depend on this product is the number the company has never published, so a run borrowing a north star from here would be borrowing an absence",
+  "read_for": "shape and population ranges - what a self-serve horizontal product looks like when it grows into teams, how fast a bundled AI capability gets attached, what a plan-based revenue attribution hides",
+  "never_read_for": "a target, a forecast, or any claim about the operator's own company; a band is a comparison, and a comparison is not a goal",
+  "if_the_company_matches": "an operator whose company genuinely IS this company gets GENERIC MODE and an elicitation, not this pack: these are public figures read at a distance, and they would be a worse source than the operator's own systems"
+ },
+ "context_files": [
+  {
+   "role": "benchmark-facts",
+   "path": "packs/ref-notion/facts.md",
+   "level": "standing-truth",
+   "consult": "any phase that needs an external comparison band; every line carries its own tag and its own source class, so a reader can see what each figure is allowed to do before using it"
+  },
+  {
+   "role": "benchmark-corpus",
+   "path": "${local:corpus_base}/benchmarks/notion",
+   "level": "corpus-FOUND-universe",
+   "consult": "research phase, and only when the operator has placed a public-source dossier at this path, named exactly as the pointer reads and carrying no suffix, which is what lets it be found without editing this manifest. It ships ABSENT by design: the pointer names where a fuller public-source read would live, input-readiness reports the miss in one row, and the run continues on facts.md alone. A dead pointer here is a named gap, never an error"
+  }
+ ],
+ "found_sources": "public information only: the tagged lines in packs/ref-notion/facts.md, plus whatever the operator has placed at the corpus pointer. No live probes, no private systems, no company access, and nothing under this pack is FOUND evidence about anybody other than the named company.",
+ "ledger_classes": [],
+ "ledger_note": "no learnings classes: a benchmark pack is read as a band and is never selected as a run's own company, so it accumulates no run history to consult first. The list is empty on purpose rather than filled with a class nothing wrote.",
+ "seam": {
+  "target": "none",
+  "note": "no engineering handoff exists for a company this operator does not run. Seam artifacts under this pack are emitted FIXTURE-marked as a schema walkthrough, the design gate is still written approved:false, and nothing ships anywhere."
+ },
+ "analytics": {
+  "grounding": "corpus-pinned",
+  "corpus": [
+   "packs/ref-notion/facts.md"
+  ],
+  "stacks": [],
+  "note": "live-analytics capabilities are NOT selectable under this pack (injection point I5). There is no instrumented property to probe here, and a probe pointed at the operator's own property while this pack is selected would attach one company's numbers to another company's name."
+ },
+ "deck_kit": {
+  "status": "none",
+  "note": "no design kit exists for a company this package does not work for, so the deck lane is unavailable. Rendering another company's identity is never substituted, and a deck ask under this pack is refused with this note."
+ },
+ "workbook_form": null,
+ "org_shape_default": null,
+ "provenance": "assembled from public information about the named company - public company reporting, public filings and funding disclosures, published product and pricing pages, published customer case studies, and founder and executive interviews as publicly reported - covering 2015 to 2026. Figures are restated in this pack's own wording and carry a source class and a year instead of an outlet name, which is this library's standing convention for anonymized descriptors. No private access, no company relationship, no confidential material."
+}

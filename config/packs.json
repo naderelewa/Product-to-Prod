@@ -3,14 +3,17 @@
   "what": "Context-pack registry. A pack swaps CONTEXT, never PROCESS: whose facts ground a run, what FOUND means under those facts, whether a downstream engineering handoff exists, how analytics claims are grounded, whether a deck lane has a design kit. The engine hardcodes no company, every company-shaped value in every verb is {company}, resolved from the selected pack or elicited.",
   "schema": {
    "default": "pack id selected when the run gives no signal. Ships as \"none\" = GENERIC MODE, deliberately: an engine that silently injected somebody else's context would be worse than one that asks.",
-   "packs.<id>": "{manifest: <plugin-root-relative path to pack.json> · company: <canonical name used for matching> · aliases: [case-insensitive match tokens] · status: active|exemplar|template · summary: <one line>}"
+   "packs.<id>": "{manifest: <plugin-root-relative path to pack.json> · company: <canonical name used for matching> · aliases: [case-insensitive match tokens] · status: active|exemplar|template|benchmark · vertical: <what the company sells, in industry words> · market: <where it sells> · model: <how it earns> · summary: <one line>}",
+   "shape": "vertical + market + model are THE SHAPE TRIPLE, and they are registry fields rather than manifest fields on purpose: the shape question is asked BEFORE any manifest is opened, over the index alone, so a company with no pack can still be told which registered pack it resembles. Every row carries all three, including the template row — a row that describes its own shape as blank is a row the shape question cannot read. They describe the COMPANY, never a run: nothing downstream reads them as evidence, and no verb may cite them as a fact about anybody."
   },
   "rules": [
    "Selection (deterministic, at context-lock open): (1) explicit --pack <id> wins; an unknown id STOPS and lists this registry, never guesses. (2) Else a unique case-insensitive match of the elicited {company} against company + aliases selects that pack. (3) Else the registry default. (4) Default \"none\" = GENERIC MODE: zero pack context injected, the evidence universe is exactly what the run supplies, handoff seam none, deck lane unavailable.",
    "The selected pack id is RECORDED in the run's canonical constants and ECHOED in the contract paragraph the owner confirms at the first gate. Downstream verbs inherit the pack from the artifacts they consume and echo it at their first step.",
    "Manifests are POINTERS ONLY, a pack references content where it already lives and never owns, copies, or moves it. A dead pointer is a NAMED input-readiness miss at context-lock, never silent, and never a machine dependency.",
    "Corpus pointers resolve against ${local:corpus_base}; in-plugin pointers are plugin-root-relative. No secrets in any manifest, pointers only.",
-   "A new pack is ONE manifest plus ONE registry row, authored from the template pack (packs/README.md §5). Design kits ship status \"owner-queued\" until their owner rules on them, the deck lane refuses rather than improvise styling."
+   "A new pack is ONE manifest plus ONE registry row, authored from the template pack (packs/README.md §5). Design kits ship status \"owner-queued\" until their owner rules on them, the deck lane refuses rather than improvise styling.",
+   "Status \"benchmark\" is a pack of PUBLIC figures about a NAMED real company, shipped so a run can see how a comparable business is built. It is never selected as the run's own company: it is read for structure and for population-tagged ranges, and its figures are tagged with a source-class descriptor and a year rather than with a link. The fictional-content guards do not apply to it, and packs/README.md §7 says why in full.",
+   "SEEDING FROM A SIMILAR CASE is offered, never performed silently: when the elicited {company} matches no pack and a registered pack shares its shape triple, the run confirms the shape reading with the operator and then offers the NEW pack's STRUCTURE, seeded from the neighbour. Structure and population-tagged ranges travel; another company's facts never travel as facts. Everything seeded lands NEEDS-CONFIRMATION and is walked as a confirm checklist. The rules are in packs/README.md §8 and the one consent question is pm-start step 1."
   ],
   "see": "packs/README.md (mechanism + injection map) · config/local.template.json (${local:} keys pack pointers may use)"
  },
@@ -26,7 +29,72 @@
     "template"
    ],
    "status": "template",
+   "vertical": "subscription video streaming / consumer media",
+   "market": "invented, multi-market",
+   "model": "consumer subscription",
    "summary": "fictional subscription-streaming engagement case, the authoring template for real packs and the fixture the registry-resolution and fictional-content checks run against; seam none, corpus-pinned evidence, no deck kit"
+  },
+  "ref-notion": {
+   "manifest": "packs/ref-notion/pack.json",
+   "company": "Notion",
+   "aliases": [
+    "notion"
+   ],
+   "status": "benchmark",
+   "vertical": "AI workspace / productivity SaaS",
+   "market": "global",
+   "model": "freemium subscription SaaS",
+   "summary": "benchmark pack: public figures on a horizontal workspace product that grew self-serve before it sold upward; read for shape and for population ranges, never selected as a run's own company"
+  },
+  "ref-chatbase": {
+   "manifest": "packs/ref-chatbase/pack.json",
+   "company": "Chatbase",
+   "aliases": [
+    "chatbase",
+    "chat base"
+   ],
+   "status": "benchmark",
+   "vertical": "AI customer support",
+   "market": "global",
+   "model": "bootstrapped self-serve SaaS",
+   "summary": "benchmark pack: public figures on a small-team AI support product sold entirely self-serve; read for shape and for population ranges, never selected as a run's own company"
+  },
+  "ref-clay": {
+   "manifest": "packs/ref-clay/pack.json",
+   "company": "Clay",
+   "aliases": [
+    "clay"
+   ],
+   "status": "benchmark",
+   "vertical": "GTM / sales infrastructure",
+   "market": "global",
+   "model": "usage-based B2B SaaS",
+   "summary": "benchmark pack: public figures on a go-to-market data product priced by consumption rather than by seat; read for shape and for population ranges, never selected as a run's own company"
+  },
+  "ref-nawy": {
+   "manifest": "packs/ref-nawy/pack.json",
+   "company": "Nawy",
+   "aliases": [
+    "nawy"
+   ],
+   "status": "benchmark",
+   "vertical": "real-estate marketplace",
+   "market": "Egypt and GCC",
+   "model": "marketplace with transaction services",
+   "summary": "benchmark pack: public figures on a property marketplace that earns on the transaction rather than on the listing; read for shape and for population ranges, never selected as a run's own company"
+  },
+  "ref-thndr": {
+   "manifest": "packs/ref-thndr/pack.json",
+   "company": "Thndr",
+   "aliases": [
+    "thndr",
+    "thunder"
+   ],
+   "status": "benchmark",
+   "vertical": "retail investing / fintech",
+   "market": "Egypt and MENA",
+   "model": "consumer brokerage app",
+   "summary": "benchmark pack: public figures on a mobile-first retail brokerage opening a market that had almost no retail participation; read for shape and for population ranges, never selected as a run's own company"
   }
  }
 }

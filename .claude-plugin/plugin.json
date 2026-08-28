@@ -1,6 +1,6 @@
 {
  "name": "product2prod",
- "version": "0.1.1",
+ "version": "0.1.2",
  "description": "AI product-management operating plugin: wizard front door, four evidence-gated verbs, multi-company packs, GTM domain library, consent-gated local telemetry.",
  "author": { "name": "the product2prod maintainers" },
  "license": "MIT"

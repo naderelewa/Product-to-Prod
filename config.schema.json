@@ -19,7 +19,7 @@
       "local"
      ],
      "default": "off",
-     "description": "What the event log does. off (DEFAULT) = nothing is captured, and no directory is created, the writer returns before it would make one. local = one JSONL line per event is appended under the directory named by telemetry.dir, and NOTHING LEAVES THIS MACHINE. THERE IS DELIBERATELY NO THIRD, TRANSMITTING MODE: this build ships no transmission path of any kind, so a mode that sends data somewhere cannot be turned on by editing a config key, adding one is a separate feature with its own consent gate, and it must be written, not inherited. An unknown or misspelled value is treated as off, never as the more permissive setting. The consent for local capture is taken at the init skill's gate T3, default NO; this key is the SETTING and acknowledged.telemetry_local is the CONSENT."
+     "description": "What the event log does. off (DEFAULT) = nothing is captured, and no directory is created, the writer returns before it would make one. local = one JSONL line per event is appended under the directory named by telemetry.dir, and NOTHING LEAVES THIS MACHINE. THERE IS DELIBERATELY NO THIRD, TRANSMITTING MODE: this build ships no transmission path for the event log, so a mode that sends data somewhere cannot be turned on by editing a config key, adding one is a separate feature with its own consent gate, and it must be written, not inherited. An unknown or misspelled value is treated as off, never as the more permissive setting. The consent for local capture is taken at the init skill's gate T3, default NO; this key is the SETTING and acknowledged.telemetry_local is the CONSENT."
     },
     "dir": {
      "type": "string",

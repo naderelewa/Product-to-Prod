@@ -21,15 +21,68 @@
 #
 # ---- the totals -------------------------------------------------------------------------------
 # total          how many checks must report. Missing one, adding one, or skipping one is a FAIL.
+#                2026-08-28, 87 -> 88: one check joins the config section, benchmark_pack_facts.
+#                It is the guard that stands where the fictional flag cannot. A benchmark pack's
+#                subject is a real company, named openly, so requiring it to declare its content
+#                invented would be requiring a false declaration; what that pack gets guarded on
+#                instead is how its figures are written down, and the new check holds every line
+#                of every packs/ref-*/facts.md that states a number to a source class and a year.
+#                Its roster line is below, under config, beside the two guards it divides work
+#                with.
+#                2026-08-28, 88 -> 89: one check joins install-and-first-run,
+#                update_check_is_the_one_network_surface. It arrives with the script that reads
+#                this package's published manifest to say whether a copy is behind. The guard
+#                already standing over the usage-log surface holds a NAMED SET to zero call
+#                forms, so a script beyond that set could reach a network with nothing watching
+#                it; the new check asks the tree-wide question instead - one file may carry a
+#                call form, one address literal is admitted by exact string, the read carries no
+#                flag that would send or redirect, and the address is a constant nothing in the
+#                environment can substitute. Its reported name is one character shorter than the
+#                sentence it wants to be: the shipped deny-list bans any token of forty
+#                characters or more, "..._is_the_only_network_surface" is exactly forty, and a
+#                roster line is a published byte. The same ban is why three names on this roster
+#                are longer than the functions that print them.
 # documents      the tree-wide grammar walk's count: every markdown file in the tree minus the 8
 #                tag-lint fixtures, which are deliberate violations the negative-fixture check
 #                requires. Measured, not remembered: 36 markdown files - 8 fixtures = 28.
+#
+#                2026-08-28, THE FIVE BENCHMARK PACKS, 28 -> 33, derived in one place rather than
+#                nudged five times. The packs are registered together (config/packs.json rows
+#                ref-notion, ref-chatbase, ref-clay, ref-nawy, ref-thndr) and each brings exactly
+#                two files: a pack.json, which is not markdown and is not walked here, and a
+#                facts.md, which is. So the delta this number takes is five, once:
+#
+#                  28  the pin before those five packs existed
+#                  +5  packs/ref-<id>/facts.md, one per benchmark pack, no fixture among them
+#                  --
+#                  33  measured tree-wide afterwards: 41 markdown files - 8 fixtures
+#
+#                Written as ONE derivation on purpose. Each pack counted on its own moves this
+#                number by one and leaves a note reading "+1 with <that pack>", which is five
+#                read-modify-writes against a shared pin and no reader anywhere able to say what
+#                the total should be. A count that is only ever incremented is a count nobody
+#                owns. The verifier RE-MEASURES this against the tree it actually finds and moves
+#                it in the same diff if a pack lands with a second markdown file.
 # links          the relative-link and in-document-anchor count the reference engine resolves: 50,
 #                re-pinned 2026-08-28 with the founder's live comparison edit, which retired one
 #                linked caveat line (ruling on record); previous pin 51,
 #                measured across README.md and the six files under docs/. It was pinned at ZERO
 #                while the tree genuinely carried no relative link, and the zero outlived that
 #                tree — the both-directions rule above exists so it cannot happen again.
+#                2026-08-28, 50 -> 52, and the two contributors are worth separating because they
+#                have different causes. The reference engine walks every markdown file in the
+#                tree, so the five new packs/ref-<id>/facts.md files and the edits to
+#                packs/README.md were all re-counted: they carry ZERO relative links between them.
+#                That is structural rather than lucky - a benchmark write-up cites a source CLASS
+#                and a year, never an address (see the benchmark section of packs/README.md), so
+#                it has nothing to link to. Six documents join this walk and not one link with
+#                them.
+#                  +0  the benchmark packs and packs/README.md, measured
+#                  +2  docs/configuration.md, which gained two links in the same window
+#                  --
+#                  52  measured tree-wide
+#                Recorded this way so the next reader can tell which change owns the movement,
+#                which a single "50 -> 52" line cannot say.
 # golden_lines   how many payload lines the wizard golden carries. Both golden checks read it, and
 #                that is the point: each of them asserts "every line of the golden" over whatever
 #                the golden happens to hold, so gutting the golden weakens both assertions while
@@ -68,9 +121,9 @@
 # token of forty characters or more, which that check's own name crosses. A roster line for it here
 # would be a leak finding in the file that pins the roster.
 
-total               = 87
-documents           = 28
-links               = 50
+total               = 89
+documents           = 33
+links               = 52
 golden_lines        = 7
 deny_patterns       = 20
 deny_classes        = machine-paths,network-hosts,platform-ids,secret-shapes,trace-ids
@@ -120,6 +173,7 @@ check stack_arity config
 check packs_registry_resolves config
 check fictional_pack_guard config
 check fictional_pack_content config
+check benchmark_pack_facts config
 check capability_row_is_real config
 check scripts_are_syntactically_valid config
 check no_vendor_named_integration_id integrations
@@ -155,6 +209,7 @@ check raw_html_inventory_is_pinned references
 check manifest_is_installable install-and-first-run
 check publish_identity_declared install-and-first-run
 check shipped_scripts_are_executable install-and-first-run
+check update_check_is_the_one_network_surface install-and-first-run
 check rungs install-and-first-run
 check ladder install-and-first-run
 check wizard_output_matches_golden install-and-first-run

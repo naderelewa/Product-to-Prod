@@ -1,0 +1,52 @@
+{
+ "_notes": "BENCHMARK PACK (packs/README.md section 7). Every fact under this pack is PUBLIC information about a real, openly named company, assembled for comparison and nothing else. A benchmark pack is not a client pack: it grounds no claim about the operator's own product, it carries no relationship with the company it describes, and it points at no private material. The shape triple (vertical, market, model) is asserted on the REGISTRY ROW rather than restated here, because the question it answers is asked over the index before any manifest is opened; 'industry' below is the human label the manifest schema requires, and it holds the same vertical. Corpus pointers resolve against ${local:corpus_base}; the one below is expected to be ABSENT on most machines, and that absence is a named input-readiness miss rather than an error. The pack's readable content is facts.md beside this file.",
+ "name": "ref-thndr",
+ "display": "Thndr, retail-investing benchmark (public information)",
+ "company": "Thndr",
+ "industry": "retail investing / fintech",
+ "status": "benchmark",
+ "fictional": false,
+ "nsm_note": "this pack states no north-star metric and will not lend one: the figures here are another company's scoreboard, and a run that adopts one of them as its own north star has borrowed a conclusion instead of reasoning to one, so the metric is elicited at context-lock and these numbers are only ever held up beside the answer.",
+ "context_files": [
+  {
+   "role": "benchmark-record",
+   "path": "${local:corpus_base}/benchmarks/thndr",
+   "level": "corpus-FOUND-universe",
+   "consult": "input-readiness, the underlying public record behind facts.md. Expected ABSENT on most machines: a benchmark pack ships the figures rather than the record, so this pointer resolving to nothing is a named miss by design and never an error. Where an operator does hold that record, it is placed here under exactly the name written above and with no suffix appended, which is what lets the pointer resolve untouched"
+  },
+  {
+   "role": "benchmark-facts",
+   "path": "packs/ref-thndr/facts.md",
+   "level": "corpus-FOUND-universe",
+   "consult": "research phase, the pack's whole readable content: every figure with its descriptor source class and its year, the strategic reading of those figures held separately as hypotheses, and the evidence bar each number clears before it is repeated anywhere"
+  }
+ ],
+ "found_sources": "public information only: a figure is FOUND under this pack when a company statement, a public filing, a regulator or exchange disclosure, a public listing or a published interview states it, and it travels with its descriptor source class and its year.",
+ "quarantine": {
+  "default_deny": true,
+  "rule": "anything under ${local:corpus_base}/benchmarks/ that is not listed in context_files is out of scope for a run under this pack: a benchmark is comparison material, and reaching past the two pointers above widens the comparison without widening the disclosure that travels with it"
+ },
+ "ledger_classes": [
+  "benchmark-read"
+ ],
+ "ledger_note": "this pack has seeded no history yet; the class names what a run should consult first when it is reading somebody else's numbers rather than its own evidence",
+ "seam": {
+  "target": "none",
+  "note": "a benchmark pack has no engineering handoff. Nothing here is anybody's roadmap, and a seam artifact emitted under it would be a handoff for a company this package does not work for"
+ },
+ "analytics": {
+  "grounding": "corpus-pinned",
+  "corpus": [
+   "packs/ref-thndr/facts.md"
+  ],
+  "stacks": [],
+  "note": "live-analytics capabilities are NOT selectable under this pack (injection point I5). There is no instrument to probe: every number here is a public statement by another company, and a live probe against the operator's own stack would be measuring a different company"
+ },
+ "deck_kit": {
+  "status": "none",
+  "note": "no design kit exists for a company this package does not work for, so the deck lane is unavailable under this pack. Styling somebody else's brand without their kit is exactly the improvisation the deck lane refuses"
+ },
+ "workbook_form": null,
+ "org_shape_default": null,
+ "provenance": "assembled for this package from public information about an openly named company: company statements and annual-keynote disclosures, regulator and exchange licensing announcements, public app listing data, investor announcements, a public employer-review platform, and published interviews. No internal data, no relationship with the company, and no re-verification at the original publishers. Figures carry descriptor source classes rather than publisher names, per the reference library's convention that a source descriptor names population, size and year."
+}

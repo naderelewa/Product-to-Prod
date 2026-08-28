@@ -1234,12 +1234,45 @@ PY
 check_packs_registry_resolves() {
   local out rc
   out=$(python3 - "$PKG_ROOT" 2>&1 <<'PY'
-import json, os, sys
+import copy, json, os, sys
 root = sys.argv[1]
 reg = json.load(open(os.path.join(root, "config", "packs.json")))
 packs = reg.get("packs") or {}
 default = reg.get("default")
 assert default == "none" or default in packs, "default names no registered pack"
+# THE SHAPE TRIPLE, asserted on EVERY row including the template's. vertical/market/model live on
+# the registry row rather than in a manifest because the question they answer — which registered
+# pack does this company resemble — is asked over the INDEX, before any manifest is opened
+# (packs/README.md §1, §8). So a row missing one of them is a pack the seeding question cannot see,
+# and a row carrying an empty string is the same hole with a key in front of it.
+SHAPE = ("vertical", "market", "model")
+
+
+def audit_shape(rows):
+    for pid, row in sorted(rows.items()):
+        for key in SHAPE:
+            assert key in row, \
+                "%s: no %s — the shape triple is required on every registry row" % (pid, key)
+            val = row[key]
+            assert isinstance(val, str) and val.strip(), \
+                "%s: %s is %r — a blank shape field is a row the seeding question cannot read" \
+                % (pid, key, val)
+
+
+audit_shape(packs)
+# AND THE ASSERTION IS PROVED TO FIRE, over a copy of the registry it has just certified. A shape
+# check that has only ever been shown complete rows is a check nobody has watched fail, and this
+# one is new enough that nobody has.
+plant = copy.deepcopy(packs)
+victim = sorted(plant)[0]
+del plant[victim]["vertical"]
+try:
+    audit_shape(plant)
+except AssertionError:
+    pass
+else:
+    raise AssertionError("CONTROL FAILED: a row with its vertical deleted passed the shape "
+                         "assertion, so that half certifies whatever it is handed")
 for pid, row in packs.items():
     m = os.path.join(root, row["manifest"])
     assert os.path.isfile(m), "manifest missing for %s: %s" % (pid, row["manifest"])
@@ -1255,7 +1288,9 @@ for pid, row in packs.items():
     assert shape is None or shape in ("solo", "domains", "squads"), \
         "%s: org_shape_default must be solo, domains or squads, or null to decline " \
         "pre-answering it — got %r" % (pid, shape)
-print("%d pack row(s): every manifest resolves, the ids agree, any pre-answered org shape is legal" % len(packs))
+print("%d pack row(s): every manifest resolves, the ids agree, any pre-answered org shape is legal, "
+      "and every row carries a filled vertical/market/model — proved by deleting one and watching "
+      "the assertion fire" % len(packs))
 PY
 )
   rc=$?
@@ -1275,18 +1310,40 @@ root = sys.argv[1]
 reg = json.load(open(os.path.join(root, "config", "packs.json")))
 rows = reg.get("packs") or {}
 assert rows, "the registry lists no pack at all — an empty guard is not a guard"
-checked = 0
+# THE STATUSES ARE ROUTED BY NAME, in both directions, rather than by one set and a silent default.
+# Written as "template or exemplar, else nothing", this guard skipped every status nobody had
+# thought about yet — including a typo — and reported the same confident count while doing it.
+GUARDED = ("template", "exemplar")
+# SKIPPED DELIBERATELY, AND HERE IS THE REASON, because a skip with no reason beside it is
+# indistinguishable from an oversight the next reader will "fix" or widen.
+#   benchmark  a benchmark pack's subject is a real company, openly named, and its content is
+#              public (packs/README.md §7). Demanding a fictional flag would be demanding a FALSE
+#              declaration on a true pack. What stands in its place is check_benchmark_pack_facts,
+#              which holds every figure in such a pack to a source class and a year.
+#   active     a live pack points at the operator's own material. This guard was never about their
+#              data; it exists so a SHIPPED pack cannot carry somebody's real facts behind an
+#              invented label, and an active pack ships with nobody but its own owner.
+SKIPPED = ("benchmark", "active")
+KNOWN = GUARDED + SKIPPED
+checked, waived = 0, 0
 for pid, row in rows.items():
     man = json.load(open(os.path.join(root, row["manifest"])))
     reg_status, man_status = row.get("status"), man.get("status")
     assert reg_status == man_status, \
         "%s: the registry says status %r and the manifest says %r — the guard reads the registry, " \
         "so a manifest that disagrees is a guard switched off from inside" % (pid, reg_status, man_status)
-    if reg_status in ("template", "exemplar"):
+    assert reg_status in KNOWN, \
+        "%s: status %r is not one of %s — an unrecognised status falls through this guard by " \
+        "default, which is a guard a typo can switch off" % (pid, reg_status, "/".join(KNOWN))
+    if reg_status in GUARDED:
         checked += 1
         assert man.get("fictional") is True, "%s is shipped as %s but not marked fictional" % (pid, reg_status)
+    else:
+        waived += 1
 assert checked, "no template or exemplar pack in the registry — the guard had nothing to guard"
-print("%d shipped template/exemplar pack(s), registry and manifest agree, every one marked fictional" % checked)
+print("%d shipped template/exemplar pack(s), registry and manifest agree, every one marked "
+      "fictional; %d row(s) of a status this guard skips by name and for a written reason; no row "
+      "carries a status outside the four this package declares" % (checked, waived))
 PY
 )
   rc=$?
@@ -1316,7 +1373,19 @@ assert vocab, "the committed vocabulary is empty"
 GRADED = re.compile(r"\b(graded|grading|marked exercise|the exercise)\b", re.I)
 problems, names = [], 0
 packs = json.load(open(os.path.join(root, "config", "packs.json"))).get("packs") or {}
+# SCOPED TO THE FICTIONAL STATUSES, by name and on purpose — the same routing the flag guard above
+# uses. This half polices STRUCTURE: it holds a pack's corpus filenames to a reviewed neutral
+# vocabulary so an invented company cannot ship a real internal exercise's filing scheme behind its
+# invented label. A benchmark pack has no such scheme to hide: its subject is public and openly
+# named (packs/README.md §7), and its write-up is facts.md, a filename that describes the artifact
+# and fingerprints nothing. Held to the fixture vocabulary it would fail for its own honest name,
+# which is a gate manufacturing a finding rather than catching one.
+SCOPE = ("template", "exemplar")
+skipped_status = 0
 for pid, row in packs.items():
+    if row.get("status") not in SCOPE:
+        skipped_status += 1
+        continue
     mpath = os.path.join(root, row["manifest"])
     man = json.load(open(mpath))
     pack_dir = os.path.dirname(mpath)
@@ -1334,17 +1403,197 @@ for pid, row in packs.items():
             if GRADED.search(line):
                 problems.append("%s:%d describes a graded exercise" % (os.path.relpath(surface, root), n))
 if not names:
-    print("no pack names any corpus file — nothing was checked against the vocabulary")
+    print("no pack of a fictional status names any corpus file — nothing was checked against the "
+          "vocabulary, and a scoped check whose scope is empty is not a pass")
     raise SystemExit(1)
 if problems:
     print("; ".join(problems[:3]))
     raise SystemExit(1)
-print("%d corpus filename(s), every token from the committed vocabulary, no graded-exercise wording" % names)
+print("%d corpus filename(s) across the template/exemplar packs, every token from the committed "
+      "vocabulary, no graded-exercise wording; %d pack(s) of another status out of scope by name"
+      % (names, skipped_status))
 PY
 )
   rc=$?
   if [ $rc -eq 0 ]; then ok "fictional_pack_content ($out)"
   else bad "fictional_pack_content" "$(printf '%s' "$out" | tail -1)"; fi
+}
+
+check_benchmark_pack_facts() {
+  # THE BENCHMARK PACKS' OWN GUARD, and the one standing where the fictional flag cannot. A pack
+  # whose subject is a real, openly named company (packs/README.md §7) cannot be guarded by a
+  # declaration that its content is invented, because its content is not invented — it is public.
+  # What IS guardable is how the figures are written down: every line of a benchmark write-up that
+  # states a number carries an evidence tag, one of three source-class DESCRIPTORS, and the year
+  # that figure describes. A bare number is precisely the failure this exists to catch — unclassed
+  # it reads as this package's own measurement, and undated it can never be seen to have gone stale.
+  #
+  # DESCRIPTORS ARE CLASSES, NOT ADDRESSES. That is the point of them: a class says how much weight
+  # a figure carries and survives the disappearance of whatever page it was read on, where a link
+  # rots quietly and takes the reader's ability to judge the number with it.
+  #
+  # AND THE ACCEPTED SET IS HELD AGAINST THE DOCUMENT THAT DECLARES IT, so the gate and the prose
+  # cannot drift into two different rules — the failure mode where a check is green because it
+  # stopped enforcing what the page still promises.
+  local out rc
+  out=$(python3 - "$PKG_ROOT" 2>&1 <<'PY'
+import json, os, re, sys
+root = sys.argv[1]
+DESCRIPTORS = ("public company reporting", "public filings",
+               "founder interviews as publicly reported")
+doc = os.path.join(root, "packs", "README.md")
+if not os.path.isfile(doc):
+    print("packs/README.md is missing, so the descriptor set this check enforces has no declaration "
+          "to agree with and the rule exists in one place only")
+    raise SystemExit(1)
+declared = open(doc, encoding="utf-8", errors="replace").read().lower()
+undeclared = [d for d in DESCRIPTORS if d not in declared]
+if undeclared:
+    print("this check accepts %s and packs/README.md names no such source class — a gate and its "
+          "documentation that disagree are two different rules" % ", ".join(repr(d) for d in undeclared))
+    raise SystemExit(1)
+
+TAG = re.compile(r"\b(FOUND|INFERRED|CONSTRUCTED|CALCULATED|HYPOTHESIS|NEEDS-CONFIRMATION)\b")
+YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
+# A FIGURE is a digit run that is not one of the things any document is full of anyway: the year
+# itself, a section reference, an ordered-list marker, or the level digit of a citation (excluded by
+# the lookbehind, since it is preceded by its own letter). What is left is a number the write-up is
+# asserting, and an asserted number carries its class and its date.
+SECTION = re.compile(r"[§#]\s*\d+(?:\.\d+)*")
+LISTMARK = re.compile(r"^\s*\d+[.)]\s")
+# the code-fence character is BUILT, never written: a literal one inside this heredoc, inside a
+# command substitution, is a parse error on some shells before this program ever runs
+TICK = chr(96)
+FENCE = re.compile(r"^\s*(" + TICK * 3 + "|~~~)")
+DIGIT = re.compile(r"(?<![A-Za-z0-9_.])\d")
+
+
+def states_a_figure(line):
+    body = SECTION.sub(" ", YEAR.sub(" ", LISTMARK.sub("", line)))
+    return bool(DIGIT.search(body))
+
+
+def classified(text):
+    low = text.lower()
+    return bool(TAG.search(text)) and bool(YEAR.search(text)) \
+        and any(d in low for d in DESCRIPTORS)
+
+
+def unclassified(line):
+    return states_a_figure(line) and not classified(line)
+
+
+# A WRAPPED BULLET IS ONE CLAIM, so the tag is looked for over the whole claim rather than over the
+# physical line the figure landed on. Prose wraps; a rule that did not know it would fire on
+# correctly written content whose tag sits two lines below its number, which is a gate manufacturing
+# findings. The blocks are cut narrowly, though — a new bullet, a table row, a heading or a blank
+# line ENDS one — because a block that ran on would let one bullet's tag classify the next bullet's
+# figure, and that is the hole this check exists to close.
+NEWBLOCK = re.compile(r"^\s*(?:[-*+]\s|\d+[.)]\s|\||#)")
+
+
+def blocks(lines):
+    """Yield (start_lineno, [lines]) for each claim block, in file order."""
+    buf, start = [], 0
+    for n, line in enumerate(lines, 1):
+        if not line.strip() or NEWBLOCK.match(line):
+            if buf:
+                yield start, buf
+            buf, start = ([line], n) if line.strip() else ([], 0)
+            continue
+        if buf:
+            buf.append(line)
+        else:
+            buf, start = [line], n
+    if buf:
+        yield start, buf
+
+
+# THE PLANT AND ITS CONTROL, run through the same predicate the tree is judged by, before the tree
+# is judged. The control is asserted to STATE A FIGURE as well as to pass: a control that passes
+# because the matcher could not see its number proves the matcher is broken, not that the rule works.
+PLANT = "| paying customers | 1,200 | | |"
+CONTROL = "| paying customers | 1,200 | FOUND | [L1: public company reporting, 2024] |"
+if not unclassified(PLANT):
+    print("CONTROL FAILED: a bare number with no source class and no year passed, so this check "
+          "certifies whatever a benchmark write-up happens to contain")
+    raise SystemExit(1)
+if not states_a_figure(CONTROL):
+    print("CONTROL FAILED: the tagged control is not even read as stating a figure, so its pass "
+          "measures a blind matcher rather than a clean line")
+    raise SystemExit(1)
+if unclassified(CONTROL):
+    print("CONTROL FAILED: a figure carrying a tag, a source class and a year was flagged, so this "
+          "check would fail every correctly written benchmark line")
+    raise SystemExit(1)
+# AND THE BLOCK RULE IS PROVED IN BOTH DIRECTIONS TOO, because a wrapped bullet is where it earns
+# its keep and where it could quietly become a hole. A tag on a continuation line must classify the
+# figure above it; a tag on the NEXT BULLET must not.
+WRAPPED = ["- paying customers reached 1,200 over the period, up from a much smaller base",
+           "  [FOUND: public company reporting, 2024]"]
+NEIGHBOUR = ["- paying customers reached 1,200 over the period",
+             "- revenue held steady [FOUND: public company reporting, 2024]"]
+if any(problem for _, blk in blocks(WRAPPED) for problem in [not classified(" ".join(blk))]
+       if any(states_a_figure(l) for l in blk) and problem):
+    print("CONTROL FAILED: a wrapped bullet whose tag sits on its continuation line was flagged, so "
+          "this check fires on correctly written prose that merely wrapped")
+    raise SystemExit(1)
+if not any(True for _, blk in blocks(NEIGHBOUR)
+           if any(states_a_figure(l) for l in blk) and not classified(" ".join(blk))):
+    print("CONTROL FAILED: a bare figure was classified by the NEXT bullet's tag, so the block rule "
+          "has run on and one claim's evidence is covering another's")
+    raise SystemExit(1)
+
+rows = json.load(open(os.path.join(root, "config", "packs.json"))).get("packs") or {}
+bench = sorted(pid for pid, row in rows.items() if row.get("status") == "benchmark")
+if not bench:
+    print("the registry lists no benchmark pack, so this gate would certify an empty set while the "
+          "status it guards is still documented and selectable")
+    raise SystemExit(1)
+problems, figures, walked = [], 0, 0
+for pid in bench:
+    pack_dir = os.path.dirname(os.path.join(root, rows[pid]["manifest"]))
+    path = os.path.join(pack_dir, "facts.md")
+    rel = os.path.relpath(path, root)
+    if not os.path.isfile(path):
+        problems.append("%s is registered as a benchmark pack and carries no %s — a benchmark that "
+                        "states nothing is a registry row, not a benchmark" % (pid, rel))
+        continue
+    walked += 1
+    here = 0
+    body, inside = [], False
+    for line in open(path, encoding="utf-8", errors="replace").read().splitlines():
+        if FENCE.match(line):
+            inside = not inside
+            body.append("")
+            continue
+        body.append("" if inside else line)
+    for start, block in blocks(body):
+        whole = " ".join(block)
+        for offset, line in enumerate(block):
+            if not states_a_figure(line):
+                continue
+            figures += 1
+            here += 1
+            if not classified(whole):
+                problems.append("%s:%d states a figure with no source class and year: %.58s"
+                                % (rel, start + offset, line.strip()))
+    if not here:
+        problems.append("%s carries no figure at all, so its own numbers are guarded by nothing"
+                        % rel)
+if problems:
+    print("; ".join(problems[:3]))
+    raise SystemExit(1)
+print("%d benchmark write-up(s), %d tagged figure(s), every one carrying one of the %d source "
+      "classes packs/README.md declares and the year it describes; proved live on four controls "
+      "before the walk: a bare number fails, a tagged figure passes, a wrapped bullet is read as "
+      "one claim, and the next bullet's tag never reaches back to cover it"
+      % (walked, figures, len(DESCRIPTORS)))
+PY
+)
+  rc=$?
+  if [ $rc -eq 0 ]; then ok "benchmark_pack_facts ($out)"
+  else bad "benchmark_pack_facts" "$(printf '%s' "$out" | tail -1)"; fi
 }
 
 check_capability_row_is_real() {
@@ -1403,6 +1652,7 @@ check_stack_arity
 check_packs_registry_resolves
 check_fictional_pack_guard
 check_fictional_pack_content
+check_benchmark_pack_facts
 check_capability_row_is_real
 check_scripts_are_syntactically_valid
 
@@ -1665,7 +1915,7 @@ done
 # (1) transmission-capable call forms. The search tool is the RESOLVED one, passed in, and its exit
 # status is discriminated: 0 = hits, 1 = clean, anything else = the tool could not run, which is a
 # FAILURE and never a clean verdict.
-TOK="c""url|w""get|net""cat|\bnc[ \t]|te""lnet|f""tp|s""cp|rs""ync|ss""h |u""rllib|urlo""pen|re""quests\.|http""lib|http\.cl""ient|so""cket\.|web""socket|xmlhttp|f""etch\(|git .*pu""sh|pu""sh (-|origin)|sub""process"
+TOK="c""url|w""get|net""cat|\bnc[ \t]|te""lnet|f""tp|s""cp|rs""ync|ss""h |u""rllib|urlo""pen|re""quests\.|http""lib|http\.cl""ient|so""cket\.|web""socket|xml""http|f""etch\(|git .*pu""sh|pu""sh (-|origin)|sub""process"
 hits="$("$g" -inE "$TOK" "${paths[@]}")"; rc=$?
 [ "$rc" -le 1 ] || { echo "the search tool exited $rc over the telemetry surface — a tool failure is not a clean verdict"; exit 1; }
 [ -z "$hits" ] || { echo "TRANSMISSION CALL FORM(S) FOUND:"; echo "$hits"; exit 1; }
@@ -3936,6 +4186,201 @@ check_shipped_scripts_are_executable() {
   fi
 }
 
+# -- the one network surface, and the single address it is allowed to read --------------------
+# WHAT THE SIBLING CANNOT SEE. check_no_transmission_path holds a NAMED SET to zero: the config
+# schema, the log writer and the setup skill. That set was the whole story while nothing in this
+# tree could reach a network at all, and "0 call forms" was true of the package only because it
+# was true of the subset that happened to be scanned. It stopped being the same sentence the day
+# one script began reading a public file, and a call form beyond a scanned set is a call form
+# nobody watches. So this check asks the opposite-shaped question, over the WHOLE tree: how many
+# places here can reach a network, and is each one the place this package declared?
+#
+# WHY NOT WIDEN THE SIBLING INSTEAD. Its first assertion bans the transfer tool by token outright.
+# Widening it to cover this script would mean exempting that token, which blunts the guard standing
+# over the usage-log surface - the one surface whose entire promise is that it has no destination.
+# Two checks with two scopes keep both sentences true.
+#
+# THE ALLOWLIST, AND THE REASON FOR IT, recorded here beside the assertion rather than in a table
+# somewhere else. The one address is this package's own published manifest, read so the plugin can
+# tell somebody their copy is behind. It is admitted BY ITS EXACT STRING and never by shape, so a
+# second destination - or this same host with a different path - is a failure and not a variant.
+# The meta-schema declaration the sibling strips by exact string is the precedent for the form.
+#
+# WHAT IS ASSERTED, in four parts. (a) exactly one file in the tree carries a network call form,
+# and it is the declared one, which also answers the narrower question about scripts/; (b) that
+# file carries exactly one address literal and it equals the allowlisted string; (c) the read is a
+# plain one - no flag on it that would attach a body, change the method, upload a file or follow a
+# redirect, because a followed redirect moves the destination at run time where nothing static can
+# see it; (d) the address is a CONSTANT on one line, assigned once, with no expansion anywhere on
+# that line - an environment-substitutable destination would make an exact-string allowlist
+# decorative.
+#
+# THE CONTROLS RUN BEFORE THE VERDICT, on copies held in memory rather than on any file. Seven
+# defects are planted into the declared surface and this check's own predicate is run over each
+# one: a second destination on the same host and on another, the one address swapped for a
+# different path on that host, a body, a method, a followed redirect, and the constant turned into
+# an environment read. Every one of them must be reported. A control that does not fire is not a
+# control, and a predicate that cannot be shown failing has not been shown to do anything.
+check_one_network_surface() {
+  local out rc
+  out=$(python3 - "$PKG_ROOT" 2>&1 <<'PY'
+import os, re, sys
+
+root = sys.argv[1]
+
+# The call forms that can reach a network, written as joined fragments so that THIS file does not
+# carry the tokens it bans. That is load-bearing rather than tidy here: the walk below reads every
+# file in the tree, and the suite is one of them.
+NET = ("c" "url|w" "get|net" "cat|\\bnc[ \t]|te" "lnet|\\bf" "tp\\b|\\bs" "cp\\b|rs" "ync|"
+       "\\bss" "h[ \t]|u" "rllib|urlo" "pen|re" "quests\\.|http" "lib|http\\.cl" "ient|"
+       "so" "cket\\.|web" "socket|xml" "http|f" "etch\\(")
+NETRX = re.compile(NET, re.I)
+
+# THE ONE ADDRESS. Same joined form, same reason.
+ALLOWED_URL = ("ht" "tps://raw.githubusercontent.com/"
+               "nad" "erel" "ewa"
+               "/Product-to-Prod/main/.claude-plugin/plugin.json")
+SURFACE = os.path.join("scripts", "update-check.sh")
+
+# The excluded set is assembled rather than typed: a literal backtick inside a here-document that
+# sits in a command substitution is read by the shell as a substitution of its own, which is why
+# the sibling checks in this file spell one chr(96) too.
+URLRX = re.compile("[A-Za-z][A-Za-z0-9+.-]*://[^\\s\"'" + chr(96) + ")>]+")
+# Case-SENSITIVE, and that is the point: -F is a form upload and -f is a failure mode, and the
+# declared read carries -f today. A case-blind list would fail the very line it is written for.
+SENDRX = re.compile(r"(?:^|\s)(-d|--data(?:-[a-z]+)?|-X|--request|-T|--upload-file|-F|--form"
+                    r"|-L|--location)(?:\s|=|$)")
+ASSIGNRX = re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)=")
+
+
+def scan(tree):
+    """tree: {root-relative path -> text}. Returns the list of things wrong with it."""
+    problems = []
+    carriers = sorted(p for p, t in tree.items() if NETRX.search(t))
+    for p in carriers:
+        if p == SURFACE:
+            continue
+        n = next(i for i, l in enumerate(tree[p].splitlines(), 1) if NETRX.search(l))
+        problems.append("%s:%d carries a network call form and is not the one declared surface"
+                        % (p, n))
+    if SURFACE not in carriers:
+        problems.append("%s carries no network call form at all, so the file this allowlist is "
+                        "written for is not the one doing the reading" % SURFACE)
+        return problems
+    text = tree[SURFACE]
+    lines = text.splitlines()
+    urls = URLRX.findall(text)
+    if len(urls) != 1:
+        problems.append("%s carries %d address literal(s) and the allowlist admits exactly one: %s"
+                        % (SURFACE, len(urls), ", ".join(sorted(set(urls))[:3])))
+    elif urls[0] != ALLOWED_URL:
+        problems.append("%s reads an address the allowlist does not admit by exact string: %s"
+                        % (SURFACE, urls[0]))
+    for n, line in enumerate(lines, 1):
+        if not NETRX.search(line):
+            continue
+        m = SENDRX.search(line)
+        if m:
+            problems.append("%s:%d the read carries %s, so it is no longer the plain read this "
+                            "exemption is for" % (SURFACE, n, m.group(1)))
+    holders = [(n, l) for n, l in enumerate(lines, 1) if URLRX.search(l)]
+    if len(holders) != 1:
+        problems.append("%s spreads its destination over %d line(s), and a constant on one line is "
+                        "the only thing an exact-string allowlist can be checked against"
+                        % (SURFACE, len(holders)))
+    else:
+        n, line = holders[0]
+        m = ASSIGNRX.match(line)
+        if not m:
+            problems.append("%s:%d the address is not a plain assignment, so what it resolves to at "
+                            "run time is not what this check read" % (SURFACE, n))
+        elif "$" in line:
+            problems.append("%s:%d the address line carries an expansion, so the environment can "
+                            "substitute the destination and this allowlist is decorative"
+                            % (SURFACE, n))
+        else:
+            name = m.group(1)
+            again = [i for i, l in enumerate(lines, 1)
+                     if i != n and re.match(r"^\s*%s=" % re.escape(name), l)]
+            if again:
+                problems.append("%s: the destination variable %s is assigned again at line(s) %s, "
+                                "so the constant this check read is not the one that runs"
+                                % (SURFACE, name, again))
+    return problems
+
+
+real, unreadable = {}, []
+for dirpath, dirnames, filenames in os.walk(root):
+    dirnames[:] = [d for d in dirnames if d not in (".git", "__pycache__")]
+    for f in sorted(filenames):
+        p = os.path.join(dirpath, f)
+        rel = os.path.relpath(p, root)
+        try:
+            real[rel] = open(p, encoding="utf-8", errors="replace").read()
+        except OSError:
+            unreadable.append(rel)
+if len(real) < 40:
+    print("the walk read %d file(s) under %s - an empty or truncated walk is not a clean verdict"
+          % (len(real), root))
+    raise SystemExit(1)
+if unreadable:
+    print("unreadable file(s), and an unreadable file is not a clean one: %s" % unreadable[:3])
+    raise SystemExit(1)
+if SURFACE not in real:
+    print("%s is not in this tree, so the file the allowlist names does not exist" % SURFACE)
+    raise SystemExit(1)
+
+SWAPPED = ALLOWED_URL.replace("/main/", "/some-other-branch/")
+OTHER_HOST = "ht" "tps://example.invalid/.claude-plugin/plugin.json"
+CONTROLS = [
+    ("a second destination on the same host",
+     lambda t: t + "\n_pkg_alt=\"%s\"\n" % SWAPPED),
+    ("a second destination on another host",
+     lambda t: t + "\n_pkg_alt=\"%s\"\n" % OTHER_HOST),
+    ("the one address swapped for another path on that same host",
+     lambda t: t.replace(ALLOWED_URL, SWAPPED)),
+    ("a body attached to the read", lambda t: t.replace(" --max-time", " -d '' --max-time")),
+    ("a method set on the read", lambda t: t.replace(" --max-time", " -X POST --max-time")),
+    ("redirects followed", lambda t: t.replace(" --max-time", " -L --max-time")),
+    ("the constant turned into an environment read",
+     lambda t: t.replace('="%s"' % ALLOWED_URL, '="${PKG_UPDATE_URL:-%s}"' % ALLOWED_URL)),
+]
+
+dead, silent = [], []
+for label, mutate in CONTROLS:
+    planted = dict(real)
+    planted[SURFACE] = mutate(real[SURFACE])
+    if planted[SURFACE] == real[SURFACE]:
+        dead.append(label)
+    elif not scan(planted):
+        silent.append(label)
+if dead:
+    print("control(s) that changed nothing, so they proved nothing: %s" % "; ".join(dead))
+    raise SystemExit(1)
+if silent:
+    print("planted defect(s) this check did not report: %s" % "; ".join(silent))
+    raise SystemExit(1)
+
+problems = scan(real)
+if problems:
+    print("; ".join(problems[:3]))
+    raise SystemExit(1)
+
+in_scripts = sorted(p for p in real if p.startswith("scripts" + os.sep) and NETRX.search(real[p]))
+print("%d file(s) walked, %d of them carrying a network call form: %s, the one declared surface "
+      "(%d in scripts/, and it is that same file). It reads one address, admitted by exact string "
+      "and not by shape, as a plain constant assigned once with no expansion on its line. %d "
+      "planted defect(s) - a second destination on this host and on another, a swapped path, a "
+      "body, a method, a followed redirect, an environment-substitutable constant - were each "
+      "reported before this verdict"
+      % (len(real), 1, SURFACE, len(in_scripts), len(CONTROLS)))
+PY
+)
+  rc=$?
+  if [ $rc -eq 0 ]; then ok "update_check_is_the_one_network_surface ($out)"
+  else bad "update_check_is_the_one_network_surface" "$(printf '%s' "$out" | tail -1)"; fi
+}
+
 check_rungs() {
   # Every install option is a rung, and a rung has to hold: each command the documents tell an
   # option to run must be satisfiable from what that option actually delivers. The option that
@@ -4133,6 +4578,7 @@ check_wizard_quotes_match_golden() {
 check_manifest_is_installable
 check_publish_identity_declared
 check_shipped_scripts_are_executable
+check_one_network_surface
 check_rungs
 check_ladder
 check_wizard_output_matches_golden

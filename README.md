@@ -101,7 +101,21 @@ Then run `init` once only if you want one of the two things it governs: the usag
 
 **4. Marketplace.** The two commands at the top of this page.
 
-Every host-specific key ships null in [`config/local.template.json`](config/local.template.json), explained in [Connections and configuration](docs/configuration.md). ## Which verb, when
+Every host-specific key ships null in [`config/local.template.json`](config/local.template.json), explained in [Connections and configuration](docs/configuration.md).
+
+## Run it outside Claude Code
+
+The method is markdown plus small scripts, so it travels, and each tier names what you lose.
+
+**Full, with gates: claude.ai, Claude Desktop and Cowork, on any paid plan.** In Plugins settings, sync this repository's URL as a marketplace and install product2prod. The skills then run in chat where code execution is on, and everything runs in Cowork. Skip the per-skill Skills upload: that door takes one skill folder per zip, and these verbs share `scripts/`, `references/` and `config/`, which it would strand.
+
+**The release ZIP, for the surfaces that execute code and take the plugin whole.** Claude Code loads it directly: `claude --plugin-dir product2prod-v0.1.2-full.zip`; the flag accepts a zip of the plugin directory. Cowork accepts the same file as a custom plugin upload, kept under the `.zip` name. It is one zip on purpose, the shared folders above inside it.
+
+**Degraded, read only: chats with no code execution.** Paste any verb's SKILL.md and work the method by hand. The discipline still reads; the enforcement does not run: no tag lint, no inference gate, none of the 89 checks. Treat every claim as untested until the suite runs somewhere with a shell.
+
+One ZIP, one sha256, one manifest, published with this release.
+
+## Which verb, when
 
 | Reach for it when | Verb | It gives you |
 |---|---|---|

@@ -34,7 +34,7 @@
 #
 # WHAT RUNS once every gate is green — three commands, in this order, each checked before the next
 # is attempted:
-#   git tag <version>
+#   git tag -a <version>   (annotated: the suite's own history check requires it)
 #   git push origin refs/tags/<version>   (surgical: only this release's tag, never stray local tags)
 #   gh release create <version> --generate-notes
 # The remote and the repository are whatever this checkout already points at. This script names no
@@ -85,7 +85,7 @@ Runs every release gate, then tags and publishes:
   gate 2  scripts/publish-lint.sh  confidentiality scan of the package, minus the two files it
                                    names as excluded (the pattern file, the machine-local config)
   gate 3  tests/run-tests.sh       the package's own suite
-  then    git tag vX.Y.Z  ->  git push origin refs/tags/vX.Y.Z  ->  gh release create vX.Y.Z --generate-notes
+  then    git tag -a vX.Y.Z  ->  git push origin refs/tags/vX.Y.Z  ->  gh release create vX.Y.Z --generate-notes
 
   --overlay   private pattern overlay from outside this tree; REQUIRED (maintainer mode), repeatable
   --dry-run   run every gate and print the three commands; change nothing
@@ -282,7 +282,7 @@ fi
 # ── the release itself ───────────────────────────────────────────────────────────────────────
 if [ "$DRY_RUN" -eq 1 ]; then
   printf '\n== dry run - every gate green, so this is what a real run would do, in order ==\n'
-  printf '  git tag %s\n' "$VERSION"
+  printf '  git tag -a %s\n' "$VERSION"
   printf '  git push origin refs/tags/%s\n' "$VERSION"
   printf '  gh release create %s --generate-notes\n' "$VERSION"
   say "dry run complete: nothing tagged, nothing pushed, nothing published"
@@ -291,7 +291,7 @@ fi
 
 printf '\n== releasing %s ==\n' "$VERSION"
 
-git -C "$PKG_ROOT" tag "$VERSION" || \
+git -C "$PKG_ROOT" tag -a "$VERSION" -m "release $VERSION: every gate green on the tagged bytes" || \
   die 1 "could not create the tag $VERSION — nothing was pushed or published"
 say "tagged $VERSION"
 

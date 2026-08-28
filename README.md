@@ -19,9 +19,10 @@ The agent drafts, then stops. Ruling the open questions stays yours, and the rec
 
 **They lose at this table.** Every factual claim carries one of six evidence tags, a linter checks that discipline mechanically, and the approval flag ships false with no code path in this plugin that writes it true. What it checks is the discipline, not the truth: a claim can still be wrong, but not quietly wrong. A FOUND must name a place to check; the second command below catches one that does not.
 
-**Prove it before you read it.** Three commands, offline, no credentials:
+**Get it, then prove it before you read it.** No credentials:
 
 ```bash
+git clone https://github.com/naderelewa/Product-to-Prod.git && cd Product-to-Prod
 bash tests/run-tests.sh                                                  # the suite behind the badge: 87 checks
 bash scripts/tag-lint.sh tests/fixtures/tag-lint/bad-found-no-anchor.md  # watch it catch a FOUND with no locator
 scripts/telemetry.sh status                                              # confirms the usage log is off and no file exists
@@ -65,7 +66,7 @@ The gap rows are the feature. Visibly empty beats quietly invented: a reader who
 
 Prerequisite: python3 on your path, and `shasum` (or `sha256sum`) for the requirements seal. Most scripts embed a python program (preflight, hostcheck, tag-lint, inference-gate, telemetry), as does the test suite; publish-lint and release are pure shell. Runs in Claude Code and any harness reading the Agent Skills spec, whose protocol is [`AGENTS.md`](AGENTS.md).
 
-Four rungs. Each one down buys a little more and costs a little more.
+Four rungs, in rising depth.
 
 **1. Zero setup: one file, one paste, nothing configured. For a first look.** Open any verb's [`SKILL.md`](skills/), paste it into your agent, and say "apply this to my product". Every verb runs with nothing configured, consented or connected.
 
@@ -78,14 +79,15 @@ Copy the [`skills/`](skills/) subfolders into your agent's skills directory; you
 **3. Claude Code (plugin). For day-to-day use with the full surface.**
 
 ```bash
-claude --plugin-dir <path-to-this-package>
+git clone https://github.com/naderelewa/Product-to-Prod.git
+claude --plugin-dir Product-to-Prod
 ```
 
 Then run `init` once only if you want one of the two things it governs: the usage log, or a read-only issue-tracker connection. Want neither and there is nothing to set up, which the wizard says in those words; its gates are in [Wizard features](docs/wizard.md). Some harnesses namespace skills, so use what your harness lists rather than the bare `/pm-start` here.
 
 **4. Marketplace**, when published: install through your harness's plugin marketplace.
 
-Every host-specific key ships null in [`config/local.template.json`](config/local.template.json), explained in [Connections and configuration](docs/configuration.md). **The first sentence to type** is the one at the top of the run above.
+Every host-specific key ships null in [`config/local.template.json`](config/local.template.json), explained in [Connections and configuration](docs/configuration.md). **Start with the sentence at the top of the run above.**
 
 ## Which verb, when
 

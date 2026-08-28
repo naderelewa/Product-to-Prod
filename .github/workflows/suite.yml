@@ -19,6 +19,12 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - name: environment diagnostic (temporary, for the latin-1 classifier divergence)
+        run: |
+          sw_vers; locale; /usr/bin/grep --version | head -1
+          printf 'caf\xe9 secret\n' > /tmp/latin1.txt
+          /usr/bin/grep -Iq -e '' -- /tmp/latin1.txt && echo "classifier: TEXT (scanned)" || echo "classifier: BINARY (excused)"
+          LC_ALL=C /usr/bin/grep -Iq -e '' -- /tmp/latin1.txt && echo "under C: TEXT" || echo "under C: BINARY"
       - name: the package's own suite
         run: bash tests/run-tests.sh
       - name: publish-lint, shipped pattern set

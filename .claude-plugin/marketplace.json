@@ -1,6 +1,6 @@
 {
  "name": "product2prod",
- "owner": { "name": "the product2prod maintainers" },
+ "owner": { "name": "Nader Elewa", "url": "https://github.com/naderelewa" },
  "plugins": [
   {
    "name": "product2prod",

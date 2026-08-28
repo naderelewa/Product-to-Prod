@@ -2,11 +2,14 @@
 # Two jobs the repository already defines for itself: the 89-check suite, then the
 # confidentiality scan in its shipped-pattern mode. Both are offline by design.
 name: suite
-# The runner ships no locale; grep under C treats the latin-1 control as binary and excuses it,
-# which the unscannable-census check correctly refuses. Pin the locale the suite is proven under.
+# Locale pinned to C on purpose: the runner's newer grep refuses to regex-match lines carrying
+# invalid UTF-8 under a UTF-8 locale, so the latin-1 control's planted hit goes unseen and the
+# unscannable-census check rightly fails. Under C, matching is byte-wise and the control fails
+# on its hit exactly as the check demands. (Diagnosed live: the classifier reads latin-1 as TEXT
+# in both locales; only the MATCH diverges.)
 env:
-  LANG: en_US.UTF-8
-  LC_ALL: en_US.UTF-8
+  LANG: C
+  LC_ALL: C
 on:
   push:
     branches: [main]
@@ -19,12 +22,6 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: environment diagnostic (temporary, for the latin-1 classifier divergence)
-        run: |
-          sw_vers; locale; /usr/bin/grep --version | head -1
-          printf 'caf\xe9 secret\n' > /tmp/latin1.txt
-          /usr/bin/grep -Iq -e '' -- /tmp/latin1.txt && echo "classifier: TEXT (scanned)" || echo "classifier: BINARY (excused)"
-          LC_ALL=C /usr/bin/grep -Iq -e '' -- /tmp/latin1.txt && echo "under C: TEXT" || echo "under C: BINARY"
       - name: the package's own suite
         run: bash tests/run-tests.sh
       - name: publish-lint, shipped pattern set

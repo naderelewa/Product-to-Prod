@@ -19,7 +19,14 @@ The agent drafts, then stops. Ruling the open questions stays yours, and the rec
 
 **They lose at this table.** Every factual claim carries one of six evidence tags, a linter checks that discipline mechanically, and the approval flag ships false with no code path in this plugin that writes it true. What it checks is the discipline, not the truth: a claim can still be wrong, but not quietly wrong. A FOUND must name a place to check; the second command below catches one that does not.
 
-**Get it, then prove it before you read it.** No credentials:
+**Get it.** In Claude, two commands, nothing cloned:
+
+```text
+/plugin marketplace add naderelewa/Product-to-Prod
+/plugin install product2prod
+```
+
+**Or prove it before you read it.** No credentials:
 
 ```bash
 git clone https://github.com/naderelewa/Product-to-Prod.git && cd Product-to-Prod
@@ -81,16 +88,9 @@ claude --plugin-dir Product-to-Prod
 
 Then run `init` once only if you want one of the two things it governs: the usage log, or a read-only issue-tracker connection. Want neither and there is nothing to set up, which the wizard says in those words; its gates are in [Wizard features](docs/wizard.md). Some harnesses namespace skills, so use what your harness lists rather than the bare `/pm-start` here.
 
-**4. Marketplace.** No clone:
+**4. Marketplace.** The two commands at the top of this page.
 
-```bash
-/plugin marketplace add naderelewa/Product-to-Prod
-/plugin install product2prod
-```
-
-Every host-specific key ships null in [`config/local.template.json`](config/local.template.json), explained in [Connections and configuration](docs/configuration.md). **Start with the sentence at the top of the run above.**
-
-## Which verb, when
+Every host-specific key ships null in [`config/local.template.json`](config/local.template.json), explained in [Connections and configuration](docs/configuration.md). ## Which verb, when
 
 | Reach for it when | Verb | It gives you |
 |---|---|---|

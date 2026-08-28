@@ -1,0 +1,66 @@
+# tests/encoding-baseline.txt — the encoding census, pinned.
+#
+# TWO DIFFERENT CLAIMS, and only one of them is a ban. The DANGEROUS classes are banned outright,
+# tree-wide, at zero: zero-width characters, bidirectional controls, non-breaking spaces and
+# byte-order marks all make a reader see something other than what a machine executes. Ordinary
+# non-ASCII is not dangerous and is not banned; this package writes in it deliberately. It is
+# COUNTED, so a silent drift is visible.
+#
+# HOW THE BAN IS DECIDED, and why the answer is not a table in this file. A ban enforced by a
+# remembered list of code points is a ban on the members somebody remembered. The first form of
+# this one left out an Arabic letter mark, a word joiner, a narrow no-break space and a figure
+# space — every one of them a member of a class the paragraph above names, and every one of them
+# able to walk through a green verdict. So check_encoding_census asks the character database
+# instead: everything the standard classifies as a FORMAT character is invisible formatting, which
+# covers the zero-width characters, all twelve bidirectional controls, the byte-order mark and the
+# soft hyphen. The three non-breaking spaces are named beside it by code point (U+00A0 NO-BREAK
+# SPACE, U+2007 FIGURE SPACE, U+202F NARROW NO-BREAK SPACE) because the standard classifies those
+# as spaces rather than formats. Before it certifies anything, the check feeds one member of each
+# named family to its own predicate, so a ban that stopped matching fails instead of passing.
+#
+# THE NUMBERS BELOW ARE MEASURED, NOT REMEMBERED. An earlier sweep recorded "no non-ASCII anywhere"
+# as a clean finding and it was false; the dangerous half of it was true. These three counts are
+# what the census actually reads, and check_encoding_census fails on any drift from them:
+#
+#   walked_files    every file the census could open and decode, under the package root
+#   nonascii_files  how many of them carry at least one non-ASCII character
+#   nonascii_lines  how many lines across the whole tree carry one
+#
+# Ordinary non-ASCII lives where a document reasons in prose: typographic dashes and quotation
+# marks in the reference library, in the documents, in the scripts' printed messages and in this
+# suite's own comment headers. None of it is a leak and none of it is banned — the count exists so
+# that a change in it has to be noticed and explained rather than absorbed.
+#
+# HOW TO CHANGE A NUMBER. Same rule as the roster: only alongside the edit that justifies it. A
+# number edited on its own is the silent drift these pins exist to catch.
+#
+# Measured over every file in the package except .git and the interpreter cache. The dangerous
+# classes are at ZERO across all of them.
+#
+# THE LINE COUNT, RE-MEASURED AT THE END OF THE FIX PASS, 878 -> 886. Stated as a derivation rather
+# than as a new number, because a re-pin with no arithmetic beside it is the drift this file exists
+# to catch, wearing the clothes of a measurement:
+#
+#   878  the count this tree carried when the pass began
+#     +2  tests/run-tests.sh   the rationale block explaining why the history harvest reads all
+#                              four identity fields and splits an address at the @
+#     +3  tests/run-tests.sh   the census comment for the grammar linter's allow-multi budget
+#     +3  tests/expected-checks.txt  that budget's own two pins and the reasoning for them
+#   ---
+#   886  measured tree-wide afterwards, over the same 59 files
+#
+# Everything else the pass touched was neutral here, and that is measured too rather than assumed:
+# AGENTS.md 2 -> 2, README.md 8 -> 8, config/denylist.txt 5 -> 5, this file 3 -> 3. The file count
+# and the walk are unchanged because no file was added or removed and every file that changed
+# already carried non-ASCII prose. Reproduce with the census in check_encoding_census itself, or:
+#   python3 -c 'import os,sys;...'  - the walk is os.walk minus .git and __pycache__, a line counts
+#   once if any character on it is above 127, and a file counts once if any of its lines did.
+#
+# 2026-08-28 RE-PIN (mechanical, this lane). Re-ran the census, in-place, over the tree with this
+# very note already written into it: 59 walked_files, 886 non-ASCII lines, 52 non-ASCII files,
+# dangerous-class count 0. Equal to the pass above (878 -> 886) with no further movement, because
+# this note's own added lines are written in plain ASCII (an ASCII hyphen, not the file's usual
+# dash) precisely so that pinning the count does not itself change the count it pins.
+walked_files   = 59
+nonascii_lines = 886
+nonascii_files = 52

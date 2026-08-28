@@ -1,0 +1,24 @@
+# tests/raw-html-inventory.txt — the raw-HTML inventory, pinned per file.
+#
+# WHAT IS PINNED AND WHAT IS ACCEPTED. Whether a page RENDERS correctly on a particular host is not
+# mechanised here, and deliberately: matching one renderer means vendoring it and re-pinning it
+# forever, a larger and staler dependency than the risk. That half is an accepted risk with a human
+# preview on the publish checklist as its mitigation. The half that IS mechanisable is this one —
+# how much raw HTML each document carries — and it is pinned so the inventory cannot grow unnoticed
+# between the preview and the publish.
+#
+# HOW IT READS. Every markdown file in the tree is counted; a file with no line here must carry
+# ZERO, and every file WITH a line here has to be present. The absent-file case used to be silently
+# tolerated, which made this inventory the one pin in the package that a deleted document could
+# walk out from under: the file goes, its line stays, and the census reports the same confident
+# green over a smaller tree. A line naming a document is a statement that the document exists.
+#
+# The counter reads element OPENERS, attributes and all: a count that matches only the bare opening
+# tag walks straight past the attribute-carrying form, which is the shape these documents use.
+#
+# FORMAT: <path relative to the package root> <count>
+# Measured over every markdown file in the package.
+
+docs/examples-by-industry.md 15
+docs/outputs.md 12
+README.md 3

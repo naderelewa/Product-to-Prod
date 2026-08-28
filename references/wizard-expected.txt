@@ -1,0 +1,51 @@
+# references/wizard-expected.txt - the wizard golden.
+#
+# WHAT THIS FILE IS. The setup wizard's verification gates tell a reader to match what the
+# telemetry tool prints. Two things therefore have to agree, and until this file existed nothing
+# held either of them to the other: the tool has to keep printing these spans, and the wizard
+# document has to keep quoting them. The suite asserts both directions against THIS file:
+#
+#   wizard_output_matches_golden   every line below is still produced by a live run of
+#                                  scripts/telemetry.sh status, then consent off
+#   wizard_quotes_match_golden     every line below is still quoted, byte for byte, in
+#                                  skills/init/SKILL.md
+#
+# Two checks over one committed file, falsifiable in opposite directions. Deriving the
+# expectation live on both sides would compare the tool to itself and prove nothing, which is why
+# the golden is committed bytes rather than a captured variable.
+#
+# HOW IT WAS MADE. Captured from a live run on a clean HOME, offline, no consent given:
+#
+#   env -i PATH="$PATH" HOME="$scratch" TMPDIR="$scratch" bash scripts/telemetry.sh status
+#   env -i PATH="$PATH" HOME="$scratch" TMPDIR="$scratch" bash scripts/telemetry.sh consent off "golden check"
+#
+# WHY SPANS AND NOT WHOLE LINES. status prints a two-column receipt whose labels are padded to a
+# fixed width and whose right-hand side carries absolute paths under the running user's home. A
+# golden built from whole printed lines would pin one machine's directory layout and one column
+# width, and would be red on every other machine and after any harmless realignment. Each entry
+# below is a verbatim span of the printed line, chosen so it is machine independent AND is the
+# exact text the wizard document quotes. Both checks match a line as a fixed string, so a span is
+# a legitimate assertion, and a span nobody prints still fails.
+#
+# WHAT IS DELIBERATELY NOT HERE. The wizard also abbreviates the mode receipt as "mode : off" with
+# single spaces, and the tool prints it padded. That abbreviation is a doc-side paraphrase, not a
+# printed span, so it is not a golden entry: an entry the tool never prints would make the first
+# check unfalsifiable by construction. The paraphrase is a matter for the doc lane, and the reason
+# is recorded here so the next reader does not "fix" it by adding a line that cannot pass.
+#
+# HOW TO CHANGE A LINE. Only in the same diff as the change that justifies it, and only after a
+# live re-capture. A golden edited on its own is the drift these two checks exist to catch.
+#
+# ---- the receipt spans ------------------------------------------------------------------------
+# T2, the config receipt: no config file exists yet on a first run.
+[absent]
+# T2, the log-directory receipt: the directory is named, and nothing has been created.
+(not recorded — nothing is removable by rule)
+# T4 on a decline: the consent record reads as never given.
+(none — declined, or never asked)
+# The no-transmission row, printed by status on every run.
+leaves this machine
+# T3's read-back keys, printed by consent off, and named in the wizard's own consent gate.
+telemetry.mode
+telemetry.dir
+acknowledged.telemetry_local

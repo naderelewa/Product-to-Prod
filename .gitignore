@@ -1,0 +1,22 @@
+# Machine-local configuration: the ONLY file that holds this operator's paths, ids and tool
+# locations. It is created from config/local.template.json on first run and must never be committed —
+# committing it publishes a machine layout, which is exactly what the ${local:} indirection exists to
+# prevent. The template, which ships with every value null, is tracked instead.
+config/local.json
+
+# Defensive, not dead: the shipped log ladder never resolves to this directory, but an operator can
+# point the log here with the documented environment override, and if they do, neither the log nor
+# anything their runs write beside it belongs in the repository. The event log is off by default;
+# see skills/init and scripts/telemetry.sh, which compose the real location at run time.
+data/
+*.log
+
+# Working output. A run's package directory belongs wherever the operator keeps their work, not in
+# the plugin's own tree.
+out/
+runs/
+
+# Build and editor noise.
+__pycache__/
+*.pyc
+.DS_Store

@@ -1,0 +1,170 @@
+# tests/expected-checks.txt — what the suite is supposed to be, written down somewhere the suite
+# cannot edit while it runs.
+#
+# WHY A SECOND FILE. A suite that counts its own checks reports whatever it happens to hold: delete
+# a check and the count follows it down, and the summary still prints a confident green. Every
+# number and every name below is the second opinion check_suite_ran_every_check compares the run
+# against, and several other checks read their floor from here rather than from a literal in a
+# function nobody re-reads.
+#
+# HOW TO CHANGE A NUMBER. Only in the same diff as the change that justifies it. A number edited on
+# its own is exactly the silent decay this file exists to catch, and a reviewer should treat a
+# lone-number diff as a finding.
+#
+# AND THE OTHER HALF OF THAT RULE, which the numbers below did not carry the first time. A pin that
+# is only ever compared as a FLOOR cannot tell "nothing shrank" from "the pin went stale while the
+# tree grew": the guard quietly loses its grip on everything added since, and a pin of zero on a
+# fewer-than comparison is not a weak guard but an unreachable one. So every count below is
+# compared in BOTH directions. Measuring more than the pin is a failure that names the drift and
+# asks for the number to move in the diff that caused it; measuring less is the original shrink
+# failure. A pin nobody can go stale on is the only kind worth writing down.
+#
+# ---- the totals -------------------------------------------------------------------------------
+# total          how many checks must report. Missing one, adding one, or skipping one is a FAIL.
+# documents      the tree-wide grammar walk's count: every markdown file in the tree minus the 8
+#                tag-lint fixtures, which are deliberate violations the negative-fixture check
+#                requires. Measured, not remembered: 36 markdown files - 8 fixtures = 28.
+# links          the relative-link and in-document-anchor count the reference engine resolves: 51,
+#                measured across README.md and the six files under docs/. It was pinned at ZERO
+#                while the tree genuinely carried no relative link, and the zero outlived that
+#                tree — the both-directions rule above exists so it cannot happen again.
+# golden_lines   how many payload lines the wizard golden carries. Both golden checks read it, and
+#                that is the point: each of them asserts "every line of the golden" over whatever
+#                the golden happens to hold, so gutting the golden weakens both assertions while
+#                both keep printing green. A count neither check can derive from the file it is
+#                testing is the second opinion that makes a partial gutting visible.
+# deny_patterns  how many patterns the shipped deny-list loads.
+# deny_classes   the class ids it declares, sorted, comma-separated.
+# allow_directives / allow_excused_spans
+#                the public allow budget. Both are zero: the one directive that shipped excused a
+#                real machine path, and the maintainer-mode twin (spans excused with the private
+#                overlay attached) is pinned in the private harness, not here.
+# tag_allow_multi_directives / tag_allow_multi_subjects
+#                THE OTHER ESCAPE HATCH, and the one that shipped with no budget at all. The
+#                grammar linter's `tag-lint:allow-multi` marker silences three of its rules —
+#                multi-tag, table-untagged and hypothesis-in-final — on every line it covers, and
+#                the shipped uses are legitimate: a mapping table's Tag cell really does list
+#                several. What was missing is the sentence this file already applies to the
+#                scanner's allow directives one paragraph up: an unpinned budget is not a budget.
+#                Nothing counted the markers, so a fence could widen over a whole section, or a
+#                marker could be pasted onto an ordinary claim, and every gate stayed green.
+#                TWO NUMBERS, because neither can see the other's drift. `directives` is how many
+#                lines in the walked set carry the marker. `subjects` is how many claim lines those
+#                markers actually silence, measured — not asserted — by re-linting the same
+#                documents with the marker text neutralised and counting what the linter then
+#                reports. Widening a fence over ten more rows moves subjects and leaves directives
+#                alone; pasting a marker where nothing needed one moves directives and leaves
+#                subjects alone. Measured, not remembered: 25 marker lines across 9 documents,
+#                silencing 22 claim lines. A subjects pin of zero would be the unreachable floor
+#                the both-directions rule above forbids, so it is refused as vacuous rather than
+#                accepted as clean.
+#
+# ONE CHECK IS NOT ON THIS ROSTER, AND THAT IS THE POINT. The release gate's maintainer-mode
+# refusals are proved outside this package, beside the other gates that need a private overlay to
+# say anything. Two reasons, and the second one is mechanical rather than a preference: a proof
+# that requires a secret can never sit on the cold-clone path, and the shipped deny-list bans any
+# token of forty characters or more, which that check's own name crosses. A roster line for it here
+# would be a leak finding in the file that pins the roster.
+
+total               = 87
+documents           = 28
+links               = 51
+golden_lines        = 7
+deny_patterns       = 20
+deny_classes        = machine-paths,network-hosts,platform-ids,secret-shapes,trace-ids
+allow_directives    = 0
+allow_excused_spans = 0
+tag_allow_multi_directives = 25
+tag_allow_multi_subjects   = 22
+
+# ---- the roster: every check, and the section it must print under ------------------------------
+# A check that prints under another section is a check whose block lost its banner, which is how
+# five consent checks printed under the wrong heading for a whole release.
+
+check publish_lint_self_test publish-lint
+check publish_lint_tree_clean publish-lint
+check publish_lint_fails_closed publish-lint
+check pattern_set_is_usable publish-lint
+check publish_lint_catches_a_plant publish-lint
+check publish_lint_allow_scope publish-lint
+check allow_budget publish-lint
+check denylist_integrity publish-lint
+check denylist_header_is_current publish-lint
+check denylist_has_no_empty_sections publish-lint
+check repro publish-lint
+check documented_local_config_is_not_a_leak publish-lint
+check paths_with_metachars publish-lint
+check reports_unscannable_files publish-lint
+check file_floor publish-lint
+check resolves_its_tools publish-lint
+check allow_scope_is_cwd_independent publish-lint
+check list_redacts_overlay_patterns publish-lint
+check allow_cannot_cross_to_overlay publish-lint
+check tag_lint_clean_fixture tag-lint
+check tag_lint_negative_fixtures tag-lint
+check tag_lint_rules_are_documented tag-lint
+check tag_grammar_walk tag-lint
+check grammar_parity tag-lint
+check gate_refuses_unruled inference-gate
+check gate_passes_ruled inference-gate
+check gate_branches_are_distinguishable inference-gate
+check entry_points_answer_help inference-gate
+check template_keys_documented config
+check local_template_ships_no_values config
+check template_promise config
+check gitignore_covers_local_config config
+check dep_rows config
+check stack_arity config
+check packs_registry_resolves config
+check fictional_pack_guard config
+check fictional_pack_content config
+check capability_row_is_real config
+check scripts_are_syntactically_valid config
+check no_vendor_named_integration_id integrations
+check issue_tracker_is_elicited integrations
+check wizard_asks_for_the_integration integrations
+check decline_is_not_a_miss integrations
+check consent_default_off consent-telemetry
+check no_transmission_path consent-telemetry
+check removal_path consent-telemetry
+check publish_lint_covers_telemetry consent-telemetry
+check class_only_redaction consent-telemetry
+check unreadable consent-telemetry
+check references_resolve references
+check references_link_floor references
+check dangling_check_covers_root_and_manifest references
+check no_dangling_references_in_script_prose references
+check exit_codes references
+check alt_tool references
+check seal_scope references
+check counts references
+check claim_census references
+check abspath references
+check md_artifact references
+check env_contract_is_complete references
+check test_claims_name_a_live_check references
+check no_meta_disclosure_phrases references
+check no_placeholder_governance_notes references
+check provenance_claims_are_consistent references
+check one_product_name references
+check region_token_census_pinned references
+check encoding_census references
+check raw_html_inventory_is_pinned references
+check manifest_is_installable install-and-first-run
+check publish_identity_declared install-and-first-run
+check shipped_scripts_are_executable install-and-first-run
+check rungs install-and-first-run
+check ladder install-and-first-run
+check wizard_output_matches_golden install-and-first-run
+check wizard_quotes_match_golden install-and-first-run
+check commit_messages_are_clean repo-history
+check release_runs_the_history_gate release-gates
+check harvest_floor suite-floor
+check temp_dirs_honor_tmpdir suite-floor
+check no_hardcoded_tool_paths suite-floor
+check failure_details_name_themselves suite-floor
+check reporter_helpers_return_zero suite-floor
+check list_flag_rejects_junk suite-floor
+check fixture_writes_are_guarded suite-floor
+check env_var_honors_caller suite-floor
+check suite_ran_every_check suite-floor

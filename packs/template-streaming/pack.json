@@ -1,0 +1,63 @@
+{
+ "_notes": "TEMPLATE PACK, the content is FICTIONAL. 'Lumina Streaming' is an invented subscription-video company and every fact below is invented with it, so the pack can be shipped, read, copied, and tested without carrying anybody's real data. Two jobs: (1) the authoring template for a real pack, copy this file, fill every required key, add one registry row; (2) the fixture the registry-resolution and fictional-content checks run against. Corpus pointers resolve against ${local:corpus_base}; nothing here is read unless a run selects this pack.",
+ "name": "template-streaming",
+ "display": "Lumina Streaming, engagement case (FICTIONAL template pack)",
+ "company": "Lumina Streaming",
+ "industry": "subscription video streaming / multi-market",
+ "status": "template",
+ "fictional": true,
+ "fixture": {
+  "strategy_statement": "Raise weekly engagement among Lumina Streaming's existing subscribers so that renewal at month three stops depending on a single new release.",
+  "statement_anchor": "[FOUND: 00_case_brief.md §1, the case brief's stated goal]",
+  "nsm_note": "the north-star metric arrives by ELICITATION at context-lock, not from the corpus: the corpus file that states one is quarantined, so a run cannot inherit the answer it is supposed to reason to",
+  "why_fictional": "a template pack is copied by strangers; inventing the content is what makes that safe"
+ },
+ "context_files": [
+  {
+   "role": "source-registry",
+   "path": "${local:corpus_base}/lumina-case/00_case_brief.md",
+   "level": "corpus-FOUND-universe",
+   "consult": "context-lock, the case's source registry and goal statement"
+  },
+  {
+   "role": "research-corpus",
+   "path": "${local:corpus_base}/lumina-case/research_base.md",
+   "level": "corpus-FOUND-universe",
+   "consult": "research phase, corpus-pinned mode, the run builds its OWN evidence ledger and findings from this file; its facts are the entire FOUND universe for the case"
+  }
+ ],
+ "found_sources": "corpus-pinned: EXACTLY the two context_files plus the operator's elicited answers. No web, no live tools, no external services. Every other file in the corpus directory is quarantined.",
+ "quarantine": {
+  "default_deny": true,
+  "rule": "anything under ${local:corpus_base}/lumina-case/ that is not listed in context_files is comparison-only, reading it during a run is leakage, and leakage invalidates the run rather than shortening it",
+  "named_comparison_files": [
+   "strategy_rationale_reference.md",
+   "rollout_reference.md",
+   "readout_reference.md",
+   "review_notes.md"
+  ]
+ },
+ "ledger_classes": [
+  "template-case"
+ ],
+ "ledger_note": "a real pack names the learnings classes its history seeded, so a later run consults them first; this template has no history to consult",
+ "seam": {
+  "target": "none",
+  "note": "no engineering handoff: seam artifacts are emitted FIXTURE-marked as a schema exercise, the design gate is still written approved:false, and nothing ships anywhere"
+ },
+ "analytics": {
+  "grounding": "corpus-pinned",
+  "corpus": [
+   "${local:corpus_base}/lumina-case/research_base.md"
+  ],
+  "stacks": [],
+  "note": "live-analytics capabilities are NOT selectable under this pack (injection point I5). Measurement plans stay machine-actionable in FORM while naming their tooling hypothetically."
+ },
+ "deck_kit": {
+  "status": "none",
+  "note": "no design kit exists for a fictional company, so the deck lane is unavailable. Generic styling is never substituted, a deck ask under this pack is refused with this note."
+ },
+ "workbook_form": null,
+ "org_shape_default": null,
+ "provenance": "authored for this package as the shipped template pack; invented content, no real company, no real corpus. Replace every value when you copy it."
+}

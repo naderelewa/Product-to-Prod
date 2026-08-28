@@ -1,0 +1,32 @@
+{
+ "_notes": {
+  "what": "Context-pack registry. A pack swaps CONTEXT, never PROCESS: whose facts ground a run, what FOUND means under those facts, whether a downstream engineering handoff exists, how analytics claims are grounded, whether a deck lane has a design kit. The engine hardcodes no company, every company-shaped value in every verb is {company}, resolved from the selected pack or elicited.",
+  "schema": {
+   "default": "pack id selected when the run gives no signal. Ships as \"none\" = GENERIC MODE, deliberately: an engine that silently injected somebody else's context would be worse than one that asks.",
+   "packs.<id>": "{manifest: <plugin-root-relative path to pack.json> · company: <canonical name used for matching> · aliases: [case-insensitive match tokens] · status: active|exemplar|template · summary: <one line>}"
+  },
+  "rules": [
+   "Selection (deterministic, at context-lock open): (1) explicit --pack <id> wins; an unknown id STOPS and lists this registry, never guesses. (2) Else a unique case-insensitive match of the elicited {company} against company + aliases selects that pack. (3) Else the registry default. (4) Default \"none\" = GENERIC MODE: zero pack context injected, the evidence universe is exactly what the run supplies, handoff seam none, deck lane unavailable.",
+   "The selected pack id is RECORDED in the run's canonical constants and ECHOED in the contract paragraph the owner confirms at the first gate. Downstream verbs inherit the pack from the artifacts they consume and echo it at their first step.",
+   "Manifests are POINTERS ONLY, a pack references content where it already lives and never owns, copies, or moves it. A dead pointer is a NAMED input-readiness miss at context-lock, never silent, and never a machine dependency.",
+   "Corpus pointers resolve against ${local:corpus_base}; in-plugin pointers are plugin-root-relative. No secrets in any manifest, pointers only.",
+   "A new pack is ONE manifest plus ONE registry row, authored from the template pack (packs/README.md §5). Design kits ship status \"owner-queued\" until their owner rules on them, the deck lane refuses rather than improvise styling."
+  ],
+  "see": "packs/README.md (mechanism + injection map) · config/local.template.json (${local:} keys pack pointers may use)"
+ },
+ "version": 1,
+ "default": "none",
+ "packs": {
+  "template-streaming": {
+   "manifest": "packs/template-streaming/pack.json",
+   "company": "Lumina Streaming",
+   "aliases": [
+    "lumina",
+    "lumina streaming",
+    "template"
+   ],
+   "status": "template",
+   "summary": "fictional subscription-streaming engagement case, the authoring template for real packs and the fixture the registry-resolution and fictional-content checks run against; seam none, corpus-pinned evidence, no deck kit"
+  }
+ }
+}

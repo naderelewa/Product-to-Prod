@@ -1,0 +1,196 @@
+{
+ "_notes": {
+  "what": "Per-verb capability manifest. scripts/preflight.sh reads this file and probes ONLY the verb's required set plus the conditional sets the locked stack selected. A miss NOTIFIES with its exact one-time fix and blocks that verb's run, it never silently degrades into a quieter, wronger answer.",
+  "schema": {
+   "deps.<id>": "{kind: mcp|skill|cli|config · what · probe: <bash expression run on THIS machine; empty legal only for kind=mcp, where registration IS the artifact> · fix: <exact one-time instruction> · setup_cmd (optional): <idempotent INSTALL command --setup may run; never an auth flow> · auth_scope: machine|account|session · elicited_by (optional): <local key> · elicit (optional): the wizard's questions, see below}",
+   "deps.<id>.elicited_by": "OPTIONAL. Names the config/local.json key that switches this integration ON. A row carrying it is ELICITED: preflight does not probe it, does not print a fix, and does NOT count it as a miss while that key is unset or false, the integration is simply absent, which is a complete and supported answer. It is probed exactly like any other row once the key is true. This is how an optional third-party integration ships with NOBODY's tracker, instance, or company baked in: the id stays generic and the wizard asks.",
+   "deps.<id>.elicit": "OPTIONAL, required when elicited_by is present. {connect: <the plain-words question that offers the integration> · api_access: <the follow-up asking whether they actually have API access> · on_yes_records: [local keys filled on a yes] · never_records: <what is deliberately NOT stored, e.g. a credential value> · on_no: <what absence means, stated plainly>}. The setup wizard reads these strings; it does not invent its own wording.",
+   "verbs.<verb>": "{required: [ids probed on every run], conditional: {<stack key>: [ids probed only when --stack selects that key]}}"
+  },
+  "rules": [
+   "Every host-specific value is written ${local:<key>} and resolved by preflight per config/local.template.json (env → config/local.json → NAMED MISS). No probe, fix, or comment in this file may contain a real path, id, account, or hostname.",
+   "An unresolved ${local:} key is reported as a NAMED MISS naming the key, the probe is NOT run with an empty value, because a probe on an empty path can only lie.",
+   "Secrets are POINTERS: probes test that a credential FILE exists. They never read it, never echo it, and no fix line ever contains a credential.",
+   "This manifest ships with the two universally-true rows and one capability row per optional integration. Add your own rows for your own tooling, that is the intended way to extend it, and a row you added is probed exactly like a shipped one.",
+   "NO ROW IS NAMED AFTER A VENDOR OR A COMPANY. Ids describe the CAPABILITY (issue-tracker, docs-workspace, design-tool), never the product or the customer behind it: an id like <vendor>_<company> would ship one operator's tooling choice, and one operator's identity, to every other user of this package. Which vendor sits behind a capability is your local config's business, asked for once and recorded on your machine.",
+   "auth_scope: machine = the artifact lives on this machine's disk · account = the registration rides your signed-in account · session = it must be live in the current session."
+  ],
+  "see": "config/local.template.json (every ${local:} key) · scripts/preflight.sh --help (verbs + stack keys) · scripts/hostcheck.sh (host-vs-bundle duplication check)"
+ },
+ "version": 1,
+ "deps": {
+  "python3": {
+   "kind": "cli",
+   "what": "the plugin scripts that embed python programs run on python3: preflight, hostcheck, tag-lint, inference-gate, telemetry (publish-lint and release are pure shell)",
+   "probe": "command -v python3 >/dev/null",
+   "fix": "install python3 (any 3.9+); on macOS the command line developer tools ship one: xcode-select --install",
+   "auth_scope": "machine"
+  },
+  "shasum": {
+   "kind": "cli",
+   "what": "sha256 receipts for the package integrity block, the numbers a reviewer re-computes to prove no artifact drifted after sealing",
+   "probe": "command -v shasum >/dev/null || command -v sha256sum >/dev/null",
+   "fix": "shasum ships with macOS; on Linux use sha256sum (coreutils). Either satisfies this row.",
+   "auth_scope": "machine"
+  },
+  "eng-registry": {
+   "kind": "config",
+   "what": "OPTIONAL engineering-handoff adapter: the downstream toolchain's surface/repo registry, read-only ground truth for surface names and repositories so a handoff never hardcodes them",
+   "probe": "test -n \"${local:eng_plugin.surfaces_registry}\" && test -r \"${local:eng_plugin.surfaces_registry}\"",
+   "fix": "point local.json key eng_plugin.surfaces_registry at your downstream toolchain's registry file (read-only, this plugin never writes it). Leave eng_plugin.* unset to run STANDALONE: the requirements package is still produced in full, with no downstream handoff.",
+   "auth_scope": "machine"
+  },
+  "eng-seam-check": {
+   "kind": "config",
+   "what": "OPTIONAL engineering-handoff adapter: your contract-version check between this engine's package shape and the downstream consumer. Exit 0 = the contract still matches.",
+   "probe": "test -n \"${local:eng_plugin.seam_check_cmd}\" && bash -c \"${local:eng_plugin.seam_check_cmd}\" >/dev/null 2>&1",
+   "fix": "set local.json key eng_plugin.seam_check_cmd to a command that exits 0 when your downstream contract version still matches. Unset = the handoff records 'no seam verification available', an honest gap, never a silent pass.",
+   "auth_scope": "machine"
+  },
+  "analytics-web": {
+   "kind": "config",
+   "what": "OPTIONAL: read-only web-analytics access for measured funnel/behaviour claims. Property ids stay per-call arguments resolved from local config.",
+   "probe": "test -n \"${local:analytics_web.property_id.prod}\" && test -r \"${local:analytics_web.service_account_json}\"",
+   "fix": "set local.json keys analytics_web.property_id.prod / .staging and analytics_web.service_account_json (a path to your read-only credential, never the credential itself). Without it, funnel claims ride NEEDS-CONFIRMATION instead of being measured.",
+   "auth_scope": "machine"
+  },
+  "analytics-product": {
+   "kind": "config",
+   "what": "OPTIONAL: read-only product-analytics access (event/funnel aggregates). Both project ids are named so a staging read can never be reported as a production fact.",
+   "probe": "test -n \"${local:analytics_product.project_id.prod}\" && test -r \"${local:analytics_product.cli_config}\"",
+   "fix": "set local.json keys analytics_product.project_id.prod / .staging and analytics_product.cli_config. Every production read passes the production id EXPLICITLY, an unnamed project silently answers from the other environment, which is the most common wrong-answer source in this whole engine.",
+   "auth_scope": "machine"
+  },
+  "session-replay": {
+   "kind": "config",
+   "what": "OPTIONAL: session-replay / heatmap reads for behavioural evidence, with a daily query budget the verify verb plans against",
+   "probe": "test -n \"${local:session_replay.project}\" && test -r \"${local:session_replay.token_path}\"",
+   "fix": "set local.json keys session_replay.project, session_replay.token_path (pointer only) and session_replay.daily_query_budget. Enumerate the queries you need BEFORE the first call when a budget is set.",
+   "auth_scope": "machine"
+  },
+  "issue-tracker": {
+   "kind": "config",
+   "elicited_by": "issue_tracker.enabled",
+   "what": "OPTIONAL and ELICITED: read-only reads of ITEM TYPES, stories and tickets, from whichever issue tracker you use, for backlog cross-checks. This row is inert until the setup wizard asks for the integration and you say yes. No tracker and no company is preconfigured here.",
+   "elicit": {
+    "connect": "Do you want to connect an issue tracker (Jira, or whatever you use) so this plugin can READ item types, stories and tickets, when it cross-checks a backlog?",
+    "api_access": "Do you have API access to it, a base URL, a project key, and a credential file you can point at?",
+    "on_yes_records": [
+     "issue_tracker.base_url",
+     "issue_tracker.project_key",
+     "issue_tracker.auth_pointer"
+    ],
+    "never_records": "the credential VALUE. auth_pointer is a path to the file holding your token; this plugin tests that the pointer resolves and never reads, copies, or echoes what is inside it.",
+    "on_no": "Nothing is recorded and the integration is simply ABSENT, standalone. This row is not probed, no fix is printed, and nothing is named as missing. Backlog cross-checks are not offered at all rather than offered-and-broken."
+   },
+   "probe": "test -n \"${local:issue_tracker.base_url}\" && test -n \"${local:issue_tracker.project_key}\" && test -r \"${local:issue_tracker.auth_pointer}\"",
+   "fix": "You turned this integration ON, so its own three keys are what is missing: set issue_tracker.base_url, issue_tracker.project_key and issue_tracker.auth_pointer in config/local.json. auth_pointer is the PATH to the file holding your read-only token, never the token itself. To turn the integration back off, set issue_tracker.enabled to false, the row then disappears rather than becoming a miss.",
+   "auth_scope": "account"
+  },
+  "docs-workspace": {
+   "kind": "config",
+   "what": "OPTIONAL: docs/wiki pages as citable evidence (meeting notes, decision pages)",
+   "probe": "test -n \"${local:docs_workspace.name}\"",
+   "fix": "set local.json key docs_workspace.name and authorise your docs tool in your harness once per account. Documents you cannot read are a named gap, not an assumption.",
+   "auth_scope": "account"
+  },
+  "design-tool": {
+   "kind": "config",
+   "what": "OPTIONAL: design-tool reads for design-parity evidence (component/token extraction)",
+   "probe": "test -r \"${local:design_tool.token_path}\"",
+   "fix": "set local.json key design_tool.token_path to a file holding your design-tool token (pointer only; the plugin never reads or echoes it).",
+   "auth_scope": "machine"
+  },
+  "repo-state": {
+   "kind": "cli",
+   "what": "OPTIONAL: read-only repository/pull-request state for grounding claims about what actually shipped",
+   "probe": "command -v git >/dev/null",
+   "fix": "install git (and, if you want hosted pull-request state, your host's CLI authenticated read-only). Without it, repository claims ride NEEDS-CONFIRMATION.",
+   "auth_scope": "machine"
+  }
+ },
+ "verbs": {
+  "pm-requirements-v1": {
+   "required": [
+    "python3",
+    "shasum"
+   ],
+   "conditional": {
+    "eng-handoff": [
+     "eng-registry",
+     "eng-seam-check"
+    ],
+    "analytics-verification": [
+     "analytics-web",
+     "analytics-product",
+     "session-replay"
+    ],
+    "design-extraction": [
+     "design-tool"
+    ],
+    "backlog-sync": [
+     "issue-tracker"
+    ],
+    "workspace-docs": [
+     "docs-workspace"
+    ],
+    "repo-state": [
+     "repo-state"
+    ]
+   }
+  },
+  "pm-verify-release-v1": {
+   "required": [
+    "python3"
+   ],
+   "conditional": {
+    "eng-handoff": [
+     "eng-registry"
+    ],
+    "analytics-verification": [
+     "analytics-web",
+     "analytics-product",
+     "session-replay"
+    ],
+    "repo-state": [
+     "repo-state"
+    ]
+   }
+  },
+  "pm-portfolio-v1": {
+   "required": [
+    "python3"
+   ],
+   "conditional": {
+    "analytics-verification": [
+     "analytics-web",
+     "analytics-product"
+    ],
+    "backlog-sync": [
+     "issue-tracker"
+    ],
+    "workspace-docs": [
+     "docs-workspace"
+    ]
+   }
+  },
+  "pm-gtm-v1": {
+   "required": [
+    "python3"
+   ],
+   "conditional": {
+    "gate-state-snapshot": [
+     "analytics-web",
+     "analytics-product",
+     "session-replay"
+    ],
+    "workspace-docs": [
+     "docs-workspace"
+    ],
+    "backlog-sync": [
+     "issue-tracker"
+    ]
+   }
+  }
+ }
+}

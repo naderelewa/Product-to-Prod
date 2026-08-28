@@ -1,0 +1,51 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "$id": "product2prod/config.schema.json",
+ "title": "product2prod config",
+ "description": "The machine-local config for this plugin. It is NOT inside the plugin and it is NOT inside any repo the plugin writes: the resolution ladder is the PKG_CONFIG environment variable, else $XDG_CONFIG_HOME/product2prod/config.json, else $HOME/.config/product2prod/config.json. Every path in that ladder is composed at RUN TIME from environment values, so no machine-specific path and no home-directory literal appears anywhere in the shipped bytes. Two kinds of absolute path are deliberate exceptions and are hardening rather than host leakage: the interpreter line at the top of every script, and the system search tool the scanners pin themselves to. JSON, not TOML: a 3.9 interpreter is a supported floor and the standard-library TOML reader is 3.11+. EVERY key is optional and carries a default, so a missing or partial config is never fatal, an absent config simply means this plugin's optional local event log is off and everything else still works. KEY WALK RULE (for a key-coverage check): a node with \"x-namespace\": true is a grouping namespace, so recurse into its properties; EVERY other node is exactly one key, whatever its type. Under that rule this file declares 3 telemetry + 1 acknowledged = 4 keys, in 2 namespaces. RUNTIME AUTHORITY: scripts/telemetry.sh carries the ONE default table the shipped code actually applies; the defaults recorded here are its declarative twin, and the two must agree, if they ever disagree, the script is what runs. ADDITIVE BY DESIGN: additionalProperties is true at every level because other layers of this plugin keep their own keys in the same file; a reader of this file must never delete a key it does not recognise. SCOPE OF THIS FILE'S GUARANTEES: it declares the consent record and the settings for the local event log, and nothing else. WHERE OPTIONAL INTEGRATIONS LIVE, AND WHY NOT HERE: the setup wizard can also offer to connect this plugin to an outside integration (see the elicit block on any config/dependencies.json row carrying elicited_by). That answer is NOT recorded in this file. It is recorded in config/local.json, under the keys documented in config/local.template.json, because that is the file the engine actually reads at run time, scripts/preflight.sh resolves ${local:...} from it, and a decision recorded anywhere else would be a second source of truth for the same fact, drifting from the one the code obeys. The switch key is deliberately three-state: UNSET means never asked, FALSE means asked and declined (so the wizard does not re-ask), TRUE means connected. NO CREDENTIAL VALUE IS EVER WRITTEN TO EITHER FILE, an integration records only a PATH to the file holding its token, and this plugin never reads, copies, or echoes that file's contents.",
+ "type": "object",
+ "additionalProperties": true,
+ "properties": {
+  "telemetry": {
+   "type": "object",
+   "x-namespace": true,
+   "additionalProperties": true,
+   "description": "The optional, local-only event log. Off until the user says otherwise at the numbered consent step in skills/init.",
+   "properties": {
+    "mode": {
+     "type": "string",
+     "enum": [
+      "off",
+      "local"
+     ],
+     "default": "off",
+     "description": "What the event log does. off (DEFAULT) = nothing is captured, and no directory is created, the writer returns before it would make one. local = one JSONL line per event is appended under the directory named by telemetry.dir, and NOTHING LEAVES THIS MACHINE. THERE IS DELIBERATELY NO THIRD, TRANSMITTING MODE: this build ships no transmission path of any kind, so a mode that sends data somewhere cannot be turned on by editing a config key, adding one is a separate feature with its own consent gate, and it must be written, not inherited. An unknown or misspelled value is treated as off, never as the more permissive setting. The consent for local capture is taken at the init skill's gate T3, default NO; this key is the SETTING and acknowledged.telemetry_local is the CONSENT."
+    },
+    "dir": {
+     "type": "string",
+     "default": "",
+     "description": "The directory the event log lives in, written by the consent step, and thereafter the LEDGER that the purge and uninstall paths read. Empty means the consent step has not run: nothing has been recorded, so nothing is removable by rule, and the removal paths refuse to guess a location rather than deleting a path they inferred. Resolution when the consent step fills it: the PKG_DATA_DIR environment variable, else $XDG_STATE_HOME/product2prod, else $HOME/.local/state/product2prod. Once recorded, the recorded value wins over the environment for every later read, so the writer and the remover can never disagree about which directory is in play. NOT a path-typed key with a fabricated default: an empty value must stay empty, because a default here would name a directory the user never consented to."
+    },
+    "max_bytes": {
+     "type": "integer",
+     "minimum": 4096,
+     "default": 524288,
+     "description": "Ceiling on ONE generation of the log, in bytes, checked on every append. The ring keeps at most 2 generations, the live file is rotated to the single previous generation, which is REPLACED and never accumulated, so the log occupies at most twice this value, forever, with no cleanup job that can fail. The generation count is structural and is deliberately NOT a config key: a knob the code does not read is worse than no knob, because it reads as a promise. The default is 512 KiB per generation, about 1 MB in total: one line of class tokens is well under 100 bytes, so a generation holds thousands of events, far more than this plugin produces in a working week, and a log that exists for the user's convenience has no business being the largest thing it writes. Raise it if you want a longer history; the floor is 4096 so the ring can never thrash."
+    }
+   }
+  },
+  "acknowledged": {
+   "type": "object",
+   "x-namespace": true,
+   "additionalProperties": true,
+   "description": "Consent records. One key per thing the user was asked, holding WHEN they said yes and ON WHAT BASIS, never a bare boolean, because 'true' cannot tell a later reader what was actually agreed to.",
+   "properties": {
+    "telemetry_local": {
+     "type": "string",
+     "default": "",
+     "description": "The consent that lets this plugin keep a local event log at all, in the form '<ISO timestamp> | basis: <what the user said>'. Written ONLY on a typed yes at the init skill's gate T3. An empty value means one of two things and both are honest: the gate was declined, or it was never reached, and in neither case may anything be written here, because writing on a NO records a decision the user did not make. The basis is the user's own words, quoted, never a paraphrase. It is cleared by the purge path, which is the 'stop and forget' action: turning the setting off leaves the record of when permission was given, but purging removes the data and the record together."
+    }
+   }
+  }
+ }
+}

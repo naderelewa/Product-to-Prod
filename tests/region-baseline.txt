@@ -1,0 +1,72 @@
+# tests/region-baseline.txt — the market-region drift gate.
+#
+# WHAT IT IS FOR, and what it deliberately is NOT. The library's benchmark write-ups cite one market
+# far more often than any other. That concentration cannot be removed by a pattern: the distinguishing
+# fact is the ABSENCE of other markets, and re-balancing benchmark populations would mean rewriting
+# the method content itself. The risk is therefore ACCEPTED in writing — and pinned, so it cannot
+# GROW unnoticed. Judgment review is the mitigation; this file is the tripwire.
+#
+# The families below are WORLD-WIDE token lists on purpose. A list holding one region would itself be
+# the fingerprint; a list holding forty measures a distribution.
+#
+# WHAT THE CENSUS WALKS, and why that is written down here rather than left in the code. A tripwire
+# that watches one directory is a tripwire around one directory: the reader-facing documents carry
+# prose too, and a concentration that appears there is the same fact about the same package. The
+# walk therefore follows an explicit scope list, every document in scope carries a pinned count for
+# every family, and a document in scope with no pin row is a FAILURE rather than a silent zero — an
+# unpinned file is an unwatched file, which is the state this gate exists to prevent.
+#
+# FORMAT
+#   @family <name> <POSIX-ERE>      the token family to count, matched case-insensitively
+#   @scope  <path>                  a directory whose .md files are censused, or a single .md file
+#   <family> <path> <count>         the pinned count for that family in that document, path given
+#                                   relative to the package root
+#
+# HOW TO CHANGE A NUMBER. Only in the same diff as the content edit that justifies it, with the
+# reason in the commit message. A number changed on its own is the drift this file exists to catch.
+# The same rule covers the scope list and the rows: a document that joins a scope brings its own
+# rows with it, in the diff that adds it.
+#
+# Measured over every document named below.
+
+@family market-region \b(GCC|Gulf|MENA|Levant|Maghreb|LATAM|APAC|EMEA|ASEAN|DACH|Benelux|Nordics|Iberia|Saudi|Arabia|Arabic|KSA|UAE|Dubai|Qatar|Kuwait|Bahrain|Oman|Egypt|Brazil|Mexico|Nigeria|Kenya|India|Indonesia|Vietnam|Japan|Korea|Germany|France|Poland|Spain|Italy|Canada|Australia)\b
+@family market-currency \b(AED|USD|EUR|GBP|JPY|BRL|INR|NGN|KES|MXN|EGP|QAR|KWD|BHD|OMR)\b
+
+@scope skills/gtm-domain-library/references
+@scope docs
+@scope README.md
+
+market-currency skills/gtm-domain-library/references/deal-test.md 0
+market-currency skills/gtm-domain-library/references/differentiation-questions.md 1
+market-currency skills/gtm-domain-library/references/icp-sharpening.md 0
+market-currency skills/gtm-domain-library/references/interview-method.md 0
+market-currency skills/gtm-domain-library/references/launch-anatomy.md 0
+market-currency skills/gtm-domain-library/references/mf-token-registry.md 0
+market-currency skills/gtm-domain-library/references/pricing-value-metric.md 9
+market-currency skills/gtm-domain-library/references/stage-metrics.md 0
+market-region skills/gtm-domain-library/references/deal-test.md 3
+market-region skills/gtm-domain-library/references/differentiation-questions.md 6
+market-region skills/gtm-domain-library/references/icp-sharpening.md 7
+market-region skills/gtm-domain-library/references/interview-method.md 1
+market-region skills/gtm-domain-library/references/launch-anatomy.md 3
+market-region skills/gtm-domain-library/references/mf-token-registry.md 0
+market-region skills/gtm-domain-library/references/pricing-value-metric.md 9
+market-region skills/gtm-domain-library/references/stage-metrics.md 2
+
+# The reader-facing surface. Every count below is zero today, and each zero is a pin rather than an
+# absence: a market token that appears in README.md or in one of the documents under docs/ fails
+# here, on the same terms as one that appears in the library.
+market-currency README.md 0
+market-currency docs/comparison.md 0
+market-currency docs/configuration.md 0
+market-currency docs/examples-by-industry.md 0
+market-currency docs/outputs.md 0
+market-currency docs/the-usage-log.md 0
+market-currency docs/wizard.md 0
+market-region README.md 0
+market-region docs/comparison.md 0
+market-region docs/configuration.md 0
+market-region docs/examples-by-industry.md 0
+market-region docs/outputs.md 0
+market-region docs/the-usage-log.md 0
+market-region docs/wizard.md 0

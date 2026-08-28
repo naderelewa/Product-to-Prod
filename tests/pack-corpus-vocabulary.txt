@@ -1,0 +1,34 @@
+# tests/pack-corpus-vocabulary.txt — the neutral vocabulary a pack's corpus filenames may use.
+#
+# WHY THIS EXISTS. A template pack's company is fictional, and the fictional flag proves that. The
+# STRUCTURE can still fingerprint a real internal exercise: four comparison files with the names a
+# graded exercise gives them describe somebody's marking scheme, not a template. So the filenames a
+# pack names are held to a vocabulary that is reviewed in one place, and check_fictional_pack_content
+# fails on any token that is not here.
+#
+# HOW TO ADD A WORD. Add it here in the same commit as the pack that needs it, and only if the word
+# describes the ARTIFACT (what the file is) rather than the exercise around it (how it is used or
+# scored). "rationale" describes an artifact. "grading" describes a scheme.
+#
+# One token per line, lower case. Filenames are split on every non-alphanumeric character, so
+# `strategy_rationale_reference.md` is the tokens strategy · rationale · reference · md.
+
+md
+reference
+comparison
+summary
+notes
+strategy
+rationale
+rollout
+readout
+review
+launch
+pricing
+research
+draft
+plan
+template
+example
+case
+appendix

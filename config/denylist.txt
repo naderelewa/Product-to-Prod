@@ -1,0 +1,93 @@
+# publish-lint deny-list — the package's OWN banned-token list
+#
+# WHAT: every pattern below is a token class that must NEVER appear in a published byte of this
+#       package. scripts/publish-lint.sh reads this file and scans every file under the package
+#       root except FIVE classes, which it counts and prints on every run rather than leaving
+#       implicit: this file (it holds the patterns, so it would match itself on every line); the
+#       machine-local config the documented first run writes, which the user writes and this
+#       package does not ship; and the three git never publishes, namely everything below .git/,
+#       anything under a __pycache__/ directory, and any *.pyc file. It exits 1 naming every hit.
+#       Fail-closed: an unreadable/empty pattern set is a lint ERROR (exit 2), never a silent pass.
+#       All five are named because an exclusion a reader cannot see is an exclusion nobody can
+#       audit, and a coverage number is only as honest as the list of what it left out.
+#
+# FORMAT
+#   <pattern>                 a DENY pattern — POSIX-ERE, matched case-INSENSITIVELY
+#   !cs:<pattern>             a DENY pattern matched CASE-SENSITIVELY (see CASE below)
+#   #@class <id>              the class id of the section that follows (a comment; ignored at load)
+#   #  <text>                 comment (ignored)
+#   #!allow <token> :: <scope>  an ALLOW directive (see below)
+#
+# CASE
+#   Case-insensitive is the default and the right default: brands, personal names and hex values
+#   leak in any casing. Four patterns are marked `!cs:` because their case IS the signal — the
+#   two analytics/tag id shapes (`GTM-`/`G-` + fixed-width upper-case alnum) and the two token
+#   prefixes (`eyJ`, `AIza`). Matched loosely, `\bGTM-[A-Z0-9]{6,}\b` fires on every lowercase
+#   `gtm-<word>` in ordinary prose, and a scanner that cries wolf is a scanner somebody
+#   switches off.
+#
+# ALLOW SEMANTICS (exact-span, never substring-erasure)
+#   A deny hit is excused only when the EXACT text the deny pattern matched equals an allowed
+#   token (case-insensitive) AND the file is inside that directive's scope. Scope is `*` (anywhere)
+#   or a comma-separated list of root-relative glob paths. Because the comparison is span-exact,
+#   allowing a public brand name never excuses a longer private codename that merely contains it —
+#   that codename's own pattern still fires on the same line.
+#
+# GREP CROSS-CHECK (patterns are plain ERE, so a reviewer can reproduce the scan by hand):
+#   /usr/bin/grep -inE -f <(/usr/bin/grep -vE '^[[:space:]]*(#|$)' config/denylist.txt | sed 's/^!cs://') <file>
+#   Two differences from the real scan, both deliberate: the hand form has NO allow-list, and it
+#   matches every pattern case-INSENSITIVELY, including the four written `!cs:` (the sed strips
+#   that directive prefix, which would otherwise leave four patterns that can never match).
+#   publish-lint.sh is the authority.
+#
+# This file holds structural patterns only.
+#
+# TWO CONVENTIONS IN THIS FILE:
+#   1. A pattern that would begin with a literal `#` is written in bracket form `[#]…`. A leading
+#      `#` makes a pattern indistinguishable from a comment, so any comment-stripping reader
+#      silently DROPS it. Bracket form is the same regex, immune to comment-stripping.
+#   2. Exceptions are machine-enforced as allow directives rather than remembered as prose.
+#
+# Additional patterns can be loaded from a file outside the scanned tree: publish-lint.sh --extra.
+
+# ============ absolute paths / machine layout ============
+#@class machine-paths
+/(Users|Volumes|private)/
+\b[A-Za-z]:\\
+
+# ============ analytics / marketing / platform identifiers ============
+#@class platform-ids
+!cs:\bGTM-[A-Z0-9]{6,}\b
+!cs:\bG-[A-Z0-9]{10}\b
+\bact_[0-9]{12,}\b
+AuthKey_[A-Z0-9]{10}\.p8
+
+# ============ hosts / network ============
+#@class network-hosts
+\b([0-9]{1,3}\.){3}[0-9]{1,3}(:[0-9]{1,5})?\b
+127\.0\.0\.1:[0-9]+
+
+# ============ generic secret shapes (defence in depth) ============
+#@class secret-shapes
+[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}
+!cs:eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}
+\b(sk|pk|rk)-[A-Za-z0-9]{16,}\b
+\bgh[posru]_[A-Za-z0-9]{20,}\b
+!cs:\bAIza[A-Za-z0-9_-]{20,}\b
+\bxox[baprs]-[A-Za-z0-9-]{10,}\b
+\b[A-Za-z0-9_-]{40,}\b
+
+# ============ session / run / ledger / decision traces ============
+#@class trace-ids
+\bwf_[0-9a-f]{6,}\b
+[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}
+\bTR-[0-9]{3,}\b
+\bIT[0-9]-[0-9]\b
+\b[0-9a-f]{7}\b
+
+# OSS AUTHOR NAMES, credited inline in the library: crediting the originator of a framework is the
+# opposite of leaking. If a credited name ever collides with a pattern from THIS file, add its own
+# scoped allow directive at the end of this file, naming that person, in attribution scope only.
+# If it collides with a pattern loaded from outside the package, its allow belongs beside that
+# pattern, in the same file it came from. Never widen the pattern instead: the patterns that catch
+# personal identifiers are the ones this package exists to keep out of a published byte.

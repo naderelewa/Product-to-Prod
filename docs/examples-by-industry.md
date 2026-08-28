@@ -2,7 +2,7 @@
 
 # Example scenarios by industry
 
-Every example below uses the dummy form **[Put Your Company Name]** in place of a real one, and every excerpt is **illustrative**: it shows the shape of what lands, not output from a real run. Numbers inside excerpts are there to show the arithmetic, not to be borrowed, and ids, file names and locators are placeholders for yours.
+Every example below uses the dummy form **[Put Your Company Name]** in place of a real one, and every excerpt is **reconstructed**: the flows are battle-tested on real production companies, those runs stay private, so what lands here carries placeholders where client specifics were. Numbers inside excerpts are there to show the arithmetic, not to be borrowed, and ids, file names and locators are placeholders for yours. One engagement built with this method is public end to end: [Netflix Engagement Intelligence](https://naderelewa.com/HS_Case).
 
 **The sizing vocabulary**
 
@@ -28,7 +28,7 @@ One honest note on Large. The intake can be 50+ items, but scoring is capped at 
 
 **What lands.** No files, unless you ask for them. `/pm-start` locks the context and sees a pricing decision; the verb it routes to opens one section of the framework library (`skills/gtm-domain-library/references/pricing-value-metric.md`) and answers with the value-metric tree plus the rows it cannot fill from your own instrumentation. The library never supplies your numbers.
 
-**Illustrative excerpt**
+**Reconstructed excerpt**
 
 ```text
 Value metric candidates, ranked
@@ -50,7 +50,7 @@ Market benchmark            [HYPOTHESIS: no durable market source found]
 
 **What lands.** One package directory: `HANDOFF.md`, `spec.md`, `plan.md`, `data-model.md`, `contracts/`, `slices.json`, `case-contract.md`, `design-gate.json`, `inference-confirmed.json`, `retro.md`.
 
-**Illustrative excerpt** (from `spec.md`)
+**Reconstructed excerpt** (from `spec.md`)
 
 ```text
 ### REQ-3.2  A returning buyer sees a saved card at checkout
@@ -72,7 +72,7 @@ Success threshold [NEEDS-CONFIRMATION → product owner: blocks the measurement 
 
 **What lands.** Verdict document, verdict JSON, request-form table, `retro.md`. A spreadsheet only if your pack declares a workbook form.
 
-**Illustrative excerpt** (from the request-form table)
+**Reconstructed excerpt** (from the request-form table)
 
 <!-- illustrative only · tag-lint:allow-multi start -->
 
@@ -111,7 +111,7 @@ The second row is the point: the score says P3 and the strategy lens says adjace
 
 **What lands.** A single-feature package, right-sized: the same artifact set, with the drops recorded. Every exclusion goes in an explicit drops-with-rationale section, because the filter is the value.
 
-**Illustrative excerpt** (from `HANDOFF.md`)
+**Reconstructed excerpt** (from `HANDOFF.md`)
 
 ```text
 Done receipt
@@ -133,7 +133,7 @@ Assumption     [HYPOTHESIS] a repeat basket is still available at the same store
 
 **What lands.** The full package. With `--stack repo-state` selected, repository and change-request state can ground claims about what actually shipped; without it, those claims ride open-question rows and say so.
 
-**Illustrative excerpt** (from the success-metrics section of `HANDOFF.md`)
+**Reconstructed excerpt** (from the success-metrics section of `HANDOFF.md`)
 
 ```text
 metric        : share of orders whose delivered time falls inside the quoted window
@@ -155,7 +155,7 @@ That section is written so the verification verb can execute it later without re
 
 **What lands.** Verdict document, verdict JSON, request-form table, `retro.md`. With `backlog-sync` connected the intake is cross-checked against your tracker's item types, read-only.
 
-**Illustrative excerpt** (the cross-check, honestly)
+**Reconstructed excerpt** (the cross-check, honestly)
 
 ```text
 matched   : <n> rows  (match_method: title · match_confidence: high)
@@ -179,7 +179,7 @@ note      : a forced join here would read exactly like "no issues found"
 
 **What lands.** A single-feature package. Learners sit in the category the framework library flags as raising the trust bar above the convenience bar, alongside money movement, health, children and identity, so reliability and honesty about limits are positioning rather than compliance overhead.
 
-**Illustrative excerpt** (from `spec.md`)
+**Reconstructed excerpt** (from `spec.md`)
 
 ```text
 ### REQ-1.4  A reminder never fires for a learner whose record was deleted
@@ -203,7 +203,7 @@ Failure paths get their own scenarios. One scenario per user-visible rule, succe
 
 **What lands.** The full package. `design-extraction` adds design-kit parity reads; without it, design claims are open-question rows rather than measured ones.
 
-**Illustrative excerpt** (from `slices.json`)
+**Reconstructed excerpt** (from `slices.json`)
 
 ```text
 SLICE-2  weekly progress digest
@@ -224,7 +224,7 @@ The invariant is required on every slice. Writing the slice graph is what expose
 
 **What lands.** Verdict document, verdict JSON, request-form table, `retro.md`.
 
-**Illustrative excerpt** (the confidence rule doing its job)
+**Reconstructed excerpt** (the confidence rule doing its job)
 
 <!-- illustrative only · tag-lint:allow-multi start -->
 
@@ -252,7 +252,7 @@ Confidence comes from the evidence, not from enthusiasm: read this cycle scores 
 
 **What lands.** No files unless you ask. The pricing framework, the value-metric tree, and a visible gap where a market benchmark would be if a durable source existed.
 
-**Illustrative excerpt**
+**Reconstructed excerpt**
 
 ```text
 Free line candidates
@@ -275,7 +275,7 @@ Visibly empty beats quietly invented. A reader who sees the gap can go and close
 
 **What lands.** The full package. Money-path items classify `money_path: true` and usually `risk_class: RED`, which changes what the gates ask for rather than what the document says.
 
-**Illustrative excerpt** (from `case-contract.md`)
+**Reconstructed excerpt** (from `case-contract.md`)
 
 ```text
 Invariant     : a limit change never applies retroactively to a settled transaction
@@ -298,7 +298,7 @@ The seal is written before the flip so that the approval covers the exact bytes 
 
 **What lands.** Verdict document, verdict JSON, request-form table, `retro.md`.
 
-**Illustrative excerpt** (the structured stop)
+**Reconstructed excerpt** (the structured stop)
 
 ```text
 REQ-09-24  "make onboarding faster"
@@ -325,7 +325,7 @@ A confidently scored misunderstanding is worse than an unscored row, so the run 
 
 **What lands.** A single-feature package, plus one differentiation question the framework library will insist on asking.
 
-**Illustrative excerpt**
+**Reconstructed excerpt**
 
 ```text
 Headline test: delete the technology word from the pitch.
@@ -345,7 +345,7 @@ Position on the problem. The capability is the how, never the headline.
 
 **What lands.** The full package. An analytics-touch item implies an instrumentation receipt in the definition of done on the building side, which is recorded here and executed there.
 
-**Illustrative excerpt** (from `spec.md`)
+**Reconstructed excerpt** (from `spec.md`)
 
 ```text
 ### REQ-2.1  Every answer shows at least one reopenable source
@@ -368,7 +368,7 @@ Trace: REQ-2 → REQ-2.1 → SLICE-3
 
 **What lands.** Verdict document, verdict JSON, request-form table, `retro.md`.
 
-**Illustrative excerpt** (the differentiation question surfacing inside a score)
+**Reconstructed excerpt** (the differentiation question surfacing inside a score)
 
 ```text
 REQ-11-06  "add a chat assistant to the home screen"

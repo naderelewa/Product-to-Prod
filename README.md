@@ -68,7 +68,7 @@ out of bounds    : <anything you said not to touch>
 
 **What lands.** No files for an ask this small; bigger asks land the package. The routed verb opens one section of the framework library (`skills/gtm-domain-library/references/pricing-value-metric.md`) and answers with the value-metric tree plus the rows only your instrumentation can fill. The library never supplies your numbers.
 
-**Illustrative excerpt**, the shape of what lands rather than a real run:
+**Reconstructed excerpt.** The flows are battle-tested on real production companies, and those runs stay private, so the excerpt below is rebuilt with placeholders. One engagement built this way is public end to end: [Netflix Engagement Intelligence](https://naderelewa.com/HS_Case), four phases on public data, 497 evidence tags, every decision gate locked.
 
 ```text
 Value metric candidates, ranked
@@ -127,6 +127,8 @@ One ZIP, one sha256, one manifest, published with this release.
 
 Two boundaries. **Mixed asks route to the first verb only**: "prioritise this, then spec the top item" runs the second only after the first closes; two verbs never share one context lock. And **"this needs no verb" is a valid answer**: five phases on a one-paragraph judgement call is a failure, not diligence. What each verb leaves on disk: [Outputs available](docs/outputs.md).
 
+And the count, so nobody trips on it: seven skills ship. Four are the evidence-gated work verbs (requirements, portfolio, go-to-market, verify), one is the `/pm-start` dispatcher that fronts them, and two are task-level support (the framework library the verbs open one section at a time, and `init` for first-run setup). The manifest counts the four verbs; the table above adds the dispatcher; `AGENTS.md` lists all seven.
+
 ## Honest comparison
 
 ### Doesn't a plain agent already write PRDs?
@@ -181,6 +183,10 @@ The requirements verb closes with a sha256 seal, so a package that drifted after
 - Run [the suite](tests/run-tests.sh) first. A change nobody has run it against is not ready to read.
 - Every new check ships with a [fixture](tests/fixtures/), so it can be watched failing on purpose.
 - A check that cannot run must fail, or report a skip with its reason. Never pass quietly.
+
+## Roadmap
+
+1. **A marketplace financial model** - P&L and unit-economics modelling for marketplace businesses as a gated verb: every band sourced, every assumption tagged, gaps visible. We have not found an open equivalent. Requests and reports: open an issue.
 
 ## License and provenance
 

@@ -21,4 +21,3 @@
 
 docs/examples-by-industry.md 15
 docs/outputs.md 12
-README.md 3

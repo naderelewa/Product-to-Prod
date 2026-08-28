@@ -61,6 +61,6 @@
 # dangerous-class count 0. Equal to the pass above (878 -> 886) with no further movement, because
 # this note's own added lines are written in plain ASCII (an ASCII hyphen, not the file's usual
 # dash) precisely so that pinning the count does not itself change the count it pins.
-walked_files   = 59
+walked_files = 60
 nonascii_lines = 886
 nonascii_files = 52

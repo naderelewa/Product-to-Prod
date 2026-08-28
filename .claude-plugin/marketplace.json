@@ -1,0 +1,11 @@
+{
+ "name": "product2prod",
+ "owner": { "name": "the product2prod maintainers" },
+ "plugins": [
+  {
+   "name": "product2prod",
+   "source": "./",
+   "description": "AI product-management operating plugin: wizard front door, four evidence-gated verbs, multi-company packs, GTM domain library, consent-gated local telemetry."
+  }
+ ]
+}

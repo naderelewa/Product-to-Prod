@@ -70,11 +70,7 @@ Four rungs, in rising depth.
 
 **1. Zero setup: one file, one paste, nothing configured. For a first look.** Open any verb's [`SKILL.md`](skills/), paste it into your agent, and say "apply this to my product". Every verb runs with nothing configured, consented or connected.
 
-<details>
-<summary><b>2. Skills folder.</b> For day-to-day use in any harness.</summary>
-
-Copy the [`skills/`](skills/) subfolders into your agent's skills directory; your harness picks them up by name and description.
-</details>
+**2. Skills folder.** Copy the [`skills/`](skills/) subfolders into your agent's skills directory; your harness picks them up by name and description.
 
 **3. Claude Code (plugin). For day-to-day use with the full surface.**
 
@@ -85,7 +81,12 @@ claude --plugin-dir Product-to-Prod
 
 Then run `init` once only if you want one of the two things it governs: the usage log, or a read-only issue-tracker connection. Want neither and there is nothing to set up, which the wizard says in those words; its gates are in [Wizard features](docs/wizard.md). Some harnesses namespace skills, so use what your harness lists rather than the bare `/pm-start` here.
 
-**4. Marketplace**, when published: install through your harness's plugin marketplace.
+**4. Marketplace.** No clone:
+
+```bash
+/plugin marketplace add naderelewa/Product-to-Prod
+/plugin install product2prod
+```
 
 Every host-specific key ships null in [`config/local.template.json`](config/local.template.json), explained in [Connections and configuration](docs/configuration.md). **Start with the sentence at the top of the run above.**
 

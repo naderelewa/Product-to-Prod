@@ -1,0 +1,17 @@
+# The suite behind the README badge, run by the platform instead of a maintainer's memory.
+# Two jobs the repository already defines for itself: the 89-check suite, then the
+# confidentiality scan in its shipped-pattern mode. Both are offline by design.
+name: suite
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: the package's own suite
+        run: bash tests/run-tests.sh
+      - name: publish-lint, shipped pattern set
+        run: bash scripts/publish-lint.sh

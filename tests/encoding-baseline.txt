@@ -102,6 +102,9 @@
 # This block is written in plain ASCII, for the reason the note above it gives: a pin whose own
 # explanation moves the number it pins can never be written down correctly. The verifier RE-MEASURES
 # all three against the tree it actually finds and moves them in the same diff if a late edit lands.
-walked_files = 71
+# 2026-08-28 night, 71 -> 72: one file joins the walk, .github/workflows/suite.yml - the public
+# CI job running the suite and publish-lint on every push (founder-ordered). Pure ASCII, so the
+# non-ASCII line total is untouched; only the walk size moves, by exactly this one file.
+walked_files = 72
 nonascii_lines = 991
 nonascii_files = 55

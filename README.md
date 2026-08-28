@@ -15,7 +15,8 @@
 
 one paragraph of intent → a plain-words interview → a locked context → gated phases → a package on disk that names its sources and its gaps
 
-[![version](https://img.shields.io/badge/version-0.1.2-blue)](#license-and-provenance)
+[![version](https://img.shields.io/badge/version-0.1.3-blue)](#license-and-provenance)
+[![suite](https://github.com/naderelewa/Product-to-Prod/actions/workflows/suite.yml/badge.svg)](https://github.com/naderelewa/Product-to-Prod/actions/workflows/suite.yml)
 [![license](https://img.shields.io/badge/license-MIT-green)](#license-and-provenance)
 [![self%20tests](https://img.shields.io/badge/self%20tests-89%20checks-brightgreen)](#tests-and-hygiene)
 [![usage%20log](https://img.shields.io/badge/usage%20log-off%20by%20default-lightgrey)](#the-usage-log)
@@ -109,7 +110,7 @@ The method is markdown plus small scripts, so it travels, and each tier names wh
 
 **Full, with gates: claude.ai, Claude Desktop and Cowork, on any paid plan.** In Plugins settings, sync this repository's URL as a marketplace and install product2prod. The skills then run in chat where code execution is on, and everything runs in Cowork. Skip the per-skill Skills upload: that door takes one skill folder per zip, and these verbs share `scripts/`, `references/` and `config/`, which it would strand.
 
-**The release ZIP, for the surfaces that execute code and take the plugin whole.** Claude Code loads it directly: `claude --plugin-dir product2prod-v0.1.2-full.zip`; the flag accepts a zip of the plugin directory. Cowork accepts the same file as a custom plugin upload, kept under the `.zip` name. It is one zip on purpose, the shared folders above inside it.
+**The release ZIP, for the surfaces that execute code and take the plugin whole.** Claude Code loads it directly: `claude --plugin-dir product2prod-v0.1.3-full.zip`; the flag accepts a zip of the plugin directory. Cowork accepts the same file as a custom plugin upload, kept under the `.zip` name. It is one zip on purpose, the shared folders above inside it.
 
 **Degraded, read only: chats with no code execution.** Paste any verb's SKILL.md and work the method by hand. The discipline still reads; the enforcement does not run: no tag lint, no inference gate, none of the 89 checks. Treat every claim as untested until the suite runs somewhere with a shell.
 
@@ -141,7 +142,7 @@ Yes, and with nothing installed it is the fastest way to draft one. What it lack
 | **Evidence discipline** | whatever the model volunteers | no evidence-tagging discipline | no evidence-tag system | six tags on every factual claim, no false FOUND, no anchor no claim, linted mechanically |
 | **Verification against reality** | none | none against analytics | not among its stages | a dedicated verb: pre-declared scenarios graded against the deployed build, queries run read-only |
 | **Data custody** | wherever your chat runs | cloud-held | cloud-held | local; usage log off by default; sends nothing; read-only version check (`PKG_NO_UPDATE_CHECK=1`) |
-| **Weakest point** | nothing pushes back | no repository or codebase awareness | the handoff is a prompt, not a contract | **no SaaS UI, single-player, young at v0.1.2, no cloud dashboards, field-proven in one harness only** |
+| **Weakest point** | nothing pushes back | no repository or codebase awareness | the handoff is a prompt, not a contract | **no SaaS UI, single-player, young at v0.1.3, no cloud dashboards, field-proven in one harness only** |
 
 Two further classes and the rows this one omits: [The full comparison](docs/comparison.md). **Reach for something else when** people must work in the document at once, with seats and sharing (a hosted team product); when somebody who will never open an agent harness has to use it (a hosted web tool); or when the ask needs no verb at all (plain chat).
 

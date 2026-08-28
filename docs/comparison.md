@@ -15,7 +15,7 @@ Every cell about another tool comes from one grounding file compiled for this co
 | **Data custody** | wherever your chat already runs | cloud-held | cloud-held | not established here | not established here | local; usage log off by default and sends nothing; one read-only version check of this package's own published manifest, off with `PKG_NO_UPDATE_CHECK=1` |
 | **Team features** | whatever your chat app already offers | team sharing | team features | not established here | not established here | **none: single-player, no seats, no sharing** |
 | **Cost model** | nothing beyond the agent you already have | subscription | about 99 dollars per month, in beta | not established here | open source, per the class name | MIT-licensed source, running in a harness you already have |
-| **Weakest point** | nothing pushes back: no tag, no lint, no gate that refuses to seal | no repository or codebase awareness | the handoff is a prompt, not a contract | no evidence discipline: that is the class's defining gap | single-vertical fit, and no wizard to route a stranger | **no SaaS UI, single-player, young at v0.1.2, no cloud dashboards, field-proven in one harness only** |
+| **Weakest point** | nothing pushes back: no tag, no lint, no gate that refuses to seal | no repository or codebase awareness | the handoff is a prompt, not a contract | no evidence discipline: that is the class's defining gap | single-vertical fit, and no wizard to route a stranger | **no SaaS UI, single-player, young at v0.1.3, no cloud dashboards, field-proven in one harness only** |
 
 **Where the other classes are genuinely stronger.** The PRD-writing SaaS: zero setup, a polished web experience, team sharing. The product-coaching SaaS: a polished hosted product, team features, and a guided coaching voice. Plain chat with no plugin remains the fastest way to draft anything, with nothing installed and nothing enforced.
 
@@ -23,5 +23,5 @@ Every cell about another tool comes from one grounding file compiled for this co
 
 - **Not a SaaS product.** There is no web UI and no hosted service. It needs an agent harness to run in.
 - **Single-player.** No team seats, no sharing, no collaboration features.
-- **Young.** Version 0.1.2. The interfaces described here can still move.
+- **Young.** Version 0.1.3. The interfaces described here can still move.
 - **No cloud dashboards.** Everything it produces is a file on your machine.

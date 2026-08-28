@@ -103,5 +103,5 @@ Most published go-to-market craft was written for products sold to engineers by 
 
 These seven sections are original write-ups of classic, publicly documented product and go-to-market methods; where a section leans on a named classic framework, the file credits its originator inline (jobs-to-be-done per Christensen, Ulwick and Klement; van Westendorp price sensitivity; BANT-class qualification). Every figure in the library carries its source, population, year and evidence tag inline; the ones that fill a slot in the fact registry trace to it as well.
 
-Where a section's structure is adapted from an MIT-licensed upstream pack, the MIT licence permits that reuse on the condition that it is attributed, and this line is that attribution.
+Where a section's structure matches the author's earlier private library, that is because this library grew out of it: same author, same copyright holder as this package's LICENSE, and no third-party licensed text is incorporated.
 

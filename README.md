@@ -1,7 +1,17 @@
 # Product2Prod --> Product Perspective to Production
 
 
-**Product management for AI agents: From --> Idea Product Ownership, Strategy, Management, PRDs, Use Cases, Ceremonies also including Technical Product Management, Engineering Handoff to UAT, Analytics & Post Production Metrics and Results.. Every claim in what it writes is either sourced or labelled unsourced, and no gate is passed by the agent that wants to pass it.**
+**Product management for AI agents, from idea to post-production:**
+
+- **Product ownership, from one idea** - [`/pm-start`](skills/pm-start/SKILL.md) opens every run: a plain-words interview locks company, domain and output, then routes to the right verb. No prompt-crafting.
+- **Strategy** - the requirements cycle's [research and strategy phases](skills/pm-requirements-v1/SKILL.md) build an evidence ledger before anything is written; the [portfolio verb](skills/pm-portfolio-v1/SKILL.md) adds an independent strategy lens to every score.
+- **PRDs, specs and use cases** - [`/pm-requirements-v1`](skills/pm-requirements-v1/SKILL.md) emits the spec-kit: spec, plan, data model, contracts and acceptance scenarios ([what lands on disk](docs/outputs.md)).
+- **Prioritization and roadmap** - [`/pm-portfolio-v1`](skills/pm-portfolio-v1/SKILL.md) turns a backlog into evidence-labelled RICE scores, P0-P3 bands and a sprint or quarter recommendation.
+- **Go-to-market** - [`/pm-gtm-v1`](skills/pm-gtm-v1/SKILL.md) builds the phase-gated launch plan, per channel and per persona, config-only by design.
+- **Technical PM and engineering handoff** - the [sealed handoff package](skills/pm-requirements-v1/references/handoff-package.md): slices, contracts and a design gate whose approval flag no code path in this plugin writes true.
+- **Acceptance, analytics and post-production results** - [`/pm-verify-release-v1`](skills/pm-verify-release-v1/SKILL.md) grades the pre-declared scenarios against the deployed build and executes the measurement plan, read-only.
+
+**Every claim in what it writes is either sourced or labelled unsourced, and no gate is passed by the agent that wants to pass it.**
 
 one paragraph of intent → a plain-words interview → a locked context → gated phases → a package on disk that names its sources and its gaps
 

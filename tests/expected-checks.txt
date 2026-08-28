@@ -83,6 +83,14 @@
 #                  52  measured tree-wide
 #                Recorded this way so the next reader can tell which change owns the movement,
 #                which a single "50 -> 52" line cannot say.
+#                2026-08-28 evening, 52 -> 61: the founder's opening paragraph became a linked
+#                capability map, one bullet per verb. All nine new links live in README.md's
+#                opening block and each resolves to a shipped file: seven distinct targets -
+#                five SKILL.md files (pm-requirements and pm-portfolio each cited twice), the
+#                handoff-package reference, and docs/outputs.md.
+#                  +9  README.md opening bullets, measured
+#                  --
+#                  61  measured tree-wide
 # golden_lines   how many payload lines the wizard golden carries. Both golden checks read it, and
 #                that is the point: each of them asserts "every line of the golden" over whatever
 #                the golden happens to hold, so gutting the golden weakens both assertions while
@@ -123,7 +131,7 @@
 
 total               = 89
 documents           = 33
-links               = 52
+links               = 61
 golden_lines        = 7
 deny_patterns       = 20
 deny_classes        = machine-paths,network-hosts,platform-ids,secret-shapes,trace-ids

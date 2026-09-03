@@ -20,6 +20,9 @@ one paragraph of intent → a plain-words interview → a locked context → gat
 [![license](https://img.shields.io/badge/license-MIT-green)](#license-and-provenance)
 [![self%20tests](https://img.shields.io/badge/self%20tests-89%20checks-brightgreen)](#tests-and-hygiene)
 [![usage%20log](https://img.shields.io/badge/usage%20log-off%20by%20default-lightgrey)](#the-usage-log)
+[![stars](https://img.shields.io/github/stars/naderelewa/Product-to-Prod?label=stars)](https://github.com/naderelewa/Product-to-Prod/stargazers)
+[![forks](https://img.shields.io/github/forks/naderelewa/Product-to-Prod?label=forks)](https://github.com/naderelewa/Product-to-Prod/forks)
+[![visitors](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnaderelewa%2FProduct-to-Prod%2Fstats%2Ftraffic.json)](https://github.com/naderelewa/Product-to-Prod/tree/stats)
 
 The agent drafts, then stops. Ruling the open questions stays yours, and the record shows what was known when you ruled. It runs inside an agent you already have, and nothing it writes leaves your machine.
 
